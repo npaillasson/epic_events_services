@@ -1,7 +1,7 @@
 from django.db import models
 from accounts.models import User
 from django.core.validators import MinValueValidator
-from validators import team_validator, end_date_validator
+from .validators import team_validator, end_date_validator
 
 class Client(models.Model):
     first_name = models.CharField(blank=False, max_length=150)
@@ -30,9 +30,9 @@ class Events(models.Model):
     support_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False)
     event_name = models.CharField(blank=False, max_length=100)
     start_date = models.DateTimeField(blank=False)
-    end_date = models.DateTimeField(blanck=False)
+    end_date = models.DateTimeField(blank=False)
     additional_information = models.CharField(blank=True, max_length=1000)
-    status= models.CharField(choices=STATUS_CHOICES)
+    status= models.CharField(choices=STATUS_CHOICES, max_length=30)
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
         team_validator(id=self.support_manager, team=3)

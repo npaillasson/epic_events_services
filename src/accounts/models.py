@@ -13,4 +13,4 @@ class User(AbstractUser):
     first_name = models.CharField(blank=False, max_length=150)
     last_name = models.CharField(blank=False, max_length=150)
     email = models.EmailField(blank=False, unique=True)
-    team = models.CharField(choices=TEAM_CHOICES)
+    team = models.CharField(choices=TEAM_CHOICES, max_length=30)
