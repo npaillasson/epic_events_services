@@ -1,6 +1,6 @@
 asgiref==3.4.1
 Django==3.2.9
-django-rest==0.8.7
+djangorestframework==3.12.4
 psycopg2-binary==2.9.2
 pytz==2021.3
 six==1.16.0
