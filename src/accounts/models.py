@@ -3,9 +3,14 @@ from django.db import models
 
 
 class User(AbstractUser):
+    TEAM_CHOICES = [
+        (1, "Gestion"),
+        (2, "Vente"),
+        (3, "Support"),
+    ]
+
 
     first_name = models.CharField(blank=False, max_length=150)
     last_name = models.CharField(blank=False, max_length=150)
-    entreprise = models.CharField(blank=True, max_length=200)
     email = models.EmailField(blank=False, unique=True)
-    phone_number = models.CharField(blank=False, unique=True, max_length=12)
+    team = models.CharField(choices=TEAM_CHOICES)
