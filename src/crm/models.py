@@ -2,6 +2,8 @@ from django.db import models
 from accounts.models import User
 from django.core.validators import MinValueValidator
 from .validators import team_validator, end_date_validator, phone_number_validator
+
+
 class Client(models.Model):
     first_name = models.CharField(blank=False, max_length=150)
     last_name = models.CharField(blank=False, max_length=150)
@@ -14,13 +16,15 @@ class Client(models.Model):
         self.phone_number = phone_number_validator(self.phone_number)
         super().save()
 
+
 class Contract(models.Model):
     client = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="client")
     signature_date = models.DateTimeField(auto_now_add=True)
     amount = models.IntegerField(blank=False, validators=[MinValueValidator(0)])
     additional_information = models.CharField(blank=True, max_length=1000)
 
-class Events(models.Model):
+
+class Event(models.Model):
 
     STATUS_CHOICES = [
         (0, "Annulé"),
