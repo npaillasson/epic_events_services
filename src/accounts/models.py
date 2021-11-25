@@ -3,6 +3,11 @@ from django.db import models
 from django.contrib.auth.models import Group
 from .validators import custom_password_validator, username_creation, assignment_of_groups, assignement_is_superuser
 
+TEAM_CHOICES = [
+    ("1", "Gestion"),
+    ("2", "Vente"),
+    ("3", "Support"),
+]
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, first_name, last_name, team):
@@ -19,18 +24,31 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class User(AbstractUser):
-    TEAM_CHOICES = [
-        ("1", "Gestion"),
-        ("2", "Vente"),
-        ("3", "Support"),
-    ]
+    def create_superuser(self, username, email, password, first_name, last_name, team):
+        user = self.model(first_name=first_name,
+                          email=email,
+                          last_name=last_name,
+                          username=username,
+                          team=team,
+                          is_staff=True,
+                          is_superuser=True)
 
-    objects = CustomUserManager()
+        user.set_password(custom_password_validator(password=password))
+        user.save(using=self._db)
+        return user
+
+class User(AbstractUser):
+
 
     first_name = models.CharField(blank=False, max_length=150)
     last_name = models.CharField(blank=False, max_length=150)
     email = models.EmailField(blank=False, unique=True)
     team = models.CharField(choices=TEAM_CHOICES, max_length=30)
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'team']
+
+
+    objects = CustomUserManager()
 
 
