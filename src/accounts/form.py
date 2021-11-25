@@ -14,7 +14,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = ('first_name', 'last_name', 'email', 'team')
+        fields = ('first_name', 'last_name', 'email', 'team', 'groups', "username")
 
     def save(self, commit=True):
         print("SAVEMODEL")

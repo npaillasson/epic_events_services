@@ -19,6 +19,7 @@ class CustomUserManager(BaseUserManager):
                           is_staff=True,
                           is_superuser=assignement_is_superuser(team))
 
+        user.save()
         assignment_of_groups(team, user)
         user.set_password(custom_password_validator(password=password))
         user.save(using=self._db)

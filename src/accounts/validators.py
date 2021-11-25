@@ -30,6 +30,11 @@ def assignment_of_groups(team, user):
         case "1":
             return None
         case "2":
-            Group.objects.get(name="vente").user_set.add(user)
+            group = Group.objects.get(name="vente")
+            group.user_set.add(user)
+            group.save()
+
         case "3":
-            Group.objects.get(name="support").user_set.add(user)
+            group = Group.objects.get(name="support")
+            group.user_set.add(user)
+            group.save()

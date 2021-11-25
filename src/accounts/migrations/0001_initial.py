@@ -4,6 +4,7 @@ import django.contrib.auth.models
 import django.contrib.auth.validators
 from django.db import migrations, models
 import django.utils.timezone
+from ..models import CustomUserManager
 
 
 class Migration(migrations.Migration):
@@ -40,7 +41,7 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
             managers=[
-                ('objects', django.contrib.auth.models.UserManager()),
+                ('objects', CustomUserManager()),
             ],
         ),
     ]

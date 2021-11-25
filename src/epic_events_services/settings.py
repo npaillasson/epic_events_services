@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'epic_events_services.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'epic_events',
+        'NAME': 'crm_epic',
         'USER': 'nathanpaillasson',
         'PASSWORD': '',
         'HOST': '',
