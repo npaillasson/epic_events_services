@@ -12,7 +12,7 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('first_name', 'last_name', 'email', 'team', 'groups')
+    list_display = ('username',)
     list_filter = ()
     fieldsets = ()
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -22,10 +22,11 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
-@admin.register(get_user_model())
+@admin.register(User)
 class MyUser(admin.ModelAdmin):
     model = get_user_model()
     form = CustomUserCreationForm
+
 
 #    def save_model(self, request, obj, form, change):
 #        data = form.cleaned_data
@@ -35,3 +36,5 @@ class MyUser(admin.ModelAdmin):
 #       super().save_model(request, obj, form, change)
 
 # Register your models here.
+
+#admin.site.register(User, UserAdmin)
