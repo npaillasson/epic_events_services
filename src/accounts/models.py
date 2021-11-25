@@ -40,11 +40,11 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser):
 
-
-    first_name = models.CharField(blank=False, max_length=150)
-    last_name = models.CharField(blank=False, max_length=150)
+    first_name = models.CharField('prénom', blank=False, max_length=150)
+    last_name = models.CharField("Nom de famille", blank=False, max_length=150)
     email = models.EmailField(blank=False, unique=True)
-    team = models.CharField(choices=TEAM_CHOICES, max_length=30)
+    team = models.CharField("équipe", choices=TEAM_CHOICES, max_length=30)
+    username = models.CharField("nom d'utilisateur", blank=True, max_length=150, unique=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'team']
