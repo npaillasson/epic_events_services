@@ -11,10 +11,16 @@ class Client(models.Model):
     email = models.EmailField(blank=False, unique=True)
     phone_number = models.CharField(blank=False, unique=True, max_length=12)
     additional_information = models.CharField(blank=True, max_length= 1000)
+
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
         self.phone_number = phone_number_validator(self.phone_number)
         super().save()
+
+    class Meta:
+        verbose_name = "Client"
+        verbose_name_plural = f"{verbose_name}s"
+
 
 
 class Contract(models.Model):
@@ -22,6 +28,10 @@ class Contract(models.Model):
     signature_date = models.DateTimeField(auto_now_add=True)
     amount = models.IntegerField(blank=False, validators=[MinValueValidator(0)])
     additional_information = models.CharField(blank=True, max_length=1000)
+
+    class Meta:
+        verbose_name = "Contrat"
+        verbose_name_plural = f"{verbose_name}s"
 
 
 class Event(models.Model):
@@ -48,3 +58,5 @@ class Event(models.Model):
 
     class Meta:
         unique_together = ('id', 'contract')
+        verbose_name = "Evènement"
+        verbose_name_plural = f"{verbose_name}s"

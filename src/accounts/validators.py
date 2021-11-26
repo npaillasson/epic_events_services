@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 
 def custom_password_validator(password):
     try:
@@ -15,7 +16,17 @@ def custom_password_validator(password):
         return password
 
 def username_creation(first_name, last_name):
-    return last_name + first_name[:1]
+    username = last_name + first_name[:1]
+    print("USERNAME", username)
+    if not get_user_model().objects.filter(username=username):
+        return username
+    i = 1
+    while i:
+        username_auto_incremented = username + str(i)
+        print("USERNAME", username_auto_incremented)
+        if not get_user_model().objects.filter(username=username_auto_incremented):
+            return username_auto_incremented
+        i += 1
 
 def assignement_is_superuser(team):
     match team:
