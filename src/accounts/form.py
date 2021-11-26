@@ -32,10 +32,10 @@ class CustomUserChangeForm(UserChangeForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
     disabled password hash display field.
+
     """
     password = ReadOnlyPasswordHashField()
-    username = forms.CharField()
-
+    #username = forms.CharField()
 
     class Meta:
         model = get_user_model()

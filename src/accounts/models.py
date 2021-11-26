@@ -25,12 +25,12 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password, first_name, last_name, team):
+    def create_superuser(self, username, email, password, first_name, last_name):
         user = self.model(first_name=first_name,
                           email=email,
                           last_name=last_name,
                           username=username,
-                          team=team,
+                          team="Admin",
                           is_staff=True,
                           is_superuser=True)
 
@@ -44,10 +44,9 @@ class User(AbstractUser):
     last_name = models.CharField("Nom de famille", blank=False, max_length=150)
     email = models.EmailField(blank=False, unique=True)
     team = models.CharField("équipe", choices=TEAM_CHOICES, max_length=30)
-    username = models.CharField("nom d'utilisateur", blank=True, max_length=150, unique=True)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'team']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
 
     objects = CustomUserManager()
