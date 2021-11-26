@@ -19,3 +19,8 @@ from django.urls import path
 urlpatterns = [
     path('EpicEvents/CRM_acces/', admin.site.urls),
 ]
+
+admin.site.site_header = "Epic Events Services"
+admin.site.index_title = "Epic Events CRM"
+admin.site.site_title = "Epic Events CRM"
+
