@@ -1,7 +1,8 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.contrib.auth.models import Group
-from .validators import custom_password_validator, username_creation, assignment_of_groups, assignement_is_superuser
+from .validators import custom_password_validator, username_creation, assignment_of_groups, assignement_is_superuser,\
+    has_not_number
 
 TEAM_CHOICES = [
     ("1", "Gestion"),
@@ -40,8 +41,8 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser):
 
-    first_name = models.CharField('prénom', blank=False, max_length=150)
-    last_name = models.CharField("Nom de famille", blank=False, max_length=150)
+    first_name = models.CharField('prénom', blank=False, max_length=150, validators=[has_not_number])
+    last_name = models.CharField("Nom de famille", blank=False, max_length=150, validators=[has_not_number])
     email = models.EmailField(blank=False, unique=True)
     team = models.CharField("équipe", choices=TEAM_CHOICES, max_length=30)
 
@@ -50,5 +51,8 @@ class User(AbstractUser):
 
 
     objects = CustomUserManager()
+
+Group._meta.verbose_name="Équipe"
+Group._meta.verbose_name_plural=f"{Group._meta.verbose_name}s"
 
 

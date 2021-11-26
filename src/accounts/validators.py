@@ -35,6 +35,11 @@ def assignement_is_superuser(team):
         case _:
             return False
 
+def has_not_number(chaine):
+    if not chaine.isalpha():
+        raise exceptions.ValidationError(f"Ce champ ne doit contenir que des lettres (pas de caractères spéciaux, ou chiffres)")
+
+
 
 def assignment_of_groups(team, user):
     match team:

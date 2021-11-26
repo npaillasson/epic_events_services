@@ -58,5 +58,5 @@ class Event(models.Model):
 
     class Meta:
         unique_together = ('id', 'contract')
-        verbose_name = "Evènement"
+        verbose_name = "Évènement"
         verbose_name_plural = f"{verbose_name}s"
