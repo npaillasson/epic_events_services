@@ -16,9 +16,6 @@ def custom_password_validator(password):
         return password
 
 
-
-
-
 def has_not_number(chaine):
     if not chaine.isalpha():
         raise exceptions.ValidationError(f"Ce champ ne doit contenir que des lettres (pas de caractères spéciaux, ou chiffres)")

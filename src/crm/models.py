@@ -24,7 +24,7 @@ class Client(models.Model):
 
 
 class Contract(models.Model):
-    client = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="client")
+    client = models.ForeignKey(to=Client, on_delete=models.CASCADE, related_name="client")
     signature_date = models.DateTimeField(auto_now_add=True)
     amount = models.IntegerField(blank=False, validators=[MinValueValidator(0)])
     additional_information = models.CharField(blank=True, max_length=1000)
@@ -37,22 +37,22 @@ class Contract(models.Model):
 class Event(models.Model):
 
     STATUS_CHOICES = [
-        (0, "Annulé"),
-        (1, "Programmé"),
-        (2, "En cours de préparation"),
-        (3, "Terminé"),
+        ("0", "Annulé"),
+        ("1", "Programmé"),
+        ("2", "En cours de préparation"),
+        ("3", "Terminé"),
     ]
 
     contract = models.ForeignKey(blank=False, to=Contract, on_delete=models.CASCADE, related_name="contract")
-    support_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False)
+    support_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False, related_name="support_manager")
     event_name = models.CharField(blank=False, max_length=100)
     start_date = models.DateTimeField(blank=False)
     end_date = models.DateTimeField(blank=False)
     additional_information = models.CharField(blank=True, max_length=1000)
     status = models.CharField(choices=STATUS_CHOICES, max_length=30)
-    def save(self, force_insert=False, force_update=False, using=None,
+    def save(self, force_insert=False, force_update=False, using=None, #METTRE CA DANS UN FORMULAIRE ADAPTE
              update_fields=None,):
-        team_validator(id=self.support_manager, team=3)
+        team_validator(id=self.support_manager.id, team="3")
         end_date_validator(self.start_date, self.end_date)
         super().save()
 

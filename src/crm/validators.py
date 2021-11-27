@@ -1,4 +1,5 @@
 import re
+import time
 from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import User
@@ -21,6 +22,7 @@ def team_validator(id, team):
                               )
 
 def end_date_validator(start_date, end_date):
-    if start_date < end_date:
+    print(start_date < end_date)
+    if start_date > end_date:
         raise ValidationError(detail ="Erreur: La date de fin de l'évènement ne peut pas être avant la date de début!")
 
