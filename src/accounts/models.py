@@ -1,8 +1,8 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.contrib.auth.models import Group
-from .validators import custom_password_validator, username_creation, assignment_of_groups, assignement_is_superuser,\
-    has_not_number
+from .validators import custom_password_validator, has_not_number
+from .custom_functions import username_creation, assignment_of_groups, assignement_is_superuser
 
 TEAM_CHOICES = [
     ("1", "Gestion"),
