@@ -21,6 +21,9 @@ class Client(models.Model):
         verbose_name = "Client"
         verbose_name_plural = f"{verbose_name}s"
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 
 class Contract(models.Model):
@@ -30,8 +33,12 @@ class Contract(models.Model):
     additional_information = models.CharField(blank=True, max_length=1000)
 
     class Meta:
+        unique_together = ('id', 'client')
         verbose_name = "Contrat"
         verbose_name_plural = f"{verbose_name}s"
+
+    def __str__(self):
+        return f"Contrat n° {self.pk}"
 
 
 class Event(models.Model):
@@ -60,3 +67,6 @@ class Event(models.Model):
         #unique_together = ('id', 'contract')
         verbose_name = "Évènement"
         verbose_name_plural = f"{verbose_name}s"
+
+    def __str__(self):
+        return f"{self.event_name}"

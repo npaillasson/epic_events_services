@@ -9,9 +9,29 @@ from accounts.models import User
 
 # Register your models here.
 
+class ClientInLine(admin.TabularInline):
+    model = Client
+    readonly_fields = ("first_name",)
+
+
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     model = Event
+    def telephone_du_client(self, inst):
+        return inst.contract.client.phone_number
+    def email_du_client(self, inst):
+        return inst.contract.client.email
+    def entreprise(self, inst):
+        return inst.contract.client.company
+
+    def get_readonly_fields(self, request, obj=None):
+        if is_in_group(request.user, "support"):
+            return ["support_manager", "telephone_du_client", "entreprise", "email_du_client",]
+        return ["telephone_du_client", "entreprise", "email_du_client",]
+
+
+    list_display = ["id", "event_name", "status", "support_manager","start_date", "end_date", "contract", "telephone_du_client", "entreprise", "email_du_client"]
+    #readonly_fields = ["telephone_du_client", "entreprise", "email_du_client",]
 
     def get_queryset(self, request):
         user = request.user
@@ -22,6 +42,18 @@ class EventAdmin(admin.ModelAdmin):
 @admin.register(Contract)
 class ContractAdmin(admin.ModelAdmin):
     model = Contract
+    def telephone_du_client(self, inst):
+        return inst.client.phone_number
+    def email_du_client(self, inst):
+        return inst.client.email
+    def entreprise(self, inst):
+        return inst.client.company
+    def evenement(self, inst):
+        return inst.contract
+    list_display = ["id", "client", "signature_date", "amount", "telephone_du_client", "entreprise", "email_du_client",
+                    "evenement"]
+    readonly_fields = ["telephone_du_client", "entreprise", "email_du_client",
+                    "evenement"]
 
     def get_queryset(self, request):
         user = request.user
@@ -50,3 +82,4 @@ class ContractAdmin(admin.ModelAdmin):
                 client_list.append(contract.client.id)
             return Client.objects.filter(id__in=client_list)
         return self.model.objects.all()
+
