@@ -43,7 +43,7 @@ class Event(models.Model):
         ("3", "Terminé"),
     ]
 
-    contract = models.ForeignKey(blank=False, to=Contract, on_delete=models.CASCADE, related_name="contract")
+    contract = models.OneToOneField(blank=False, to=Contract, on_delete=models.CASCADE, related_name="contract")
     support_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False, related_name="support_manager")
     event_name = models.CharField(blank=False, max_length=100)
     start_date = models.DateTimeField(blank=False)
@@ -57,6 +57,6 @@ class Event(models.Model):
         super().save()
 
     class Meta:
-        unique_together = ('id', 'contract')
+        #unique_together = ('id', 'contract')
         verbose_name = "Évènement"
         verbose_name_plural = f"{verbose_name}s"
