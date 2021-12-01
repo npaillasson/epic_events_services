@@ -5,12 +5,12 @@ from .validators import team_validator, end_date_validator, phone_number_validat
 
 
 class Client(models.Model):
-    first_name = models.CharField(blank=False, max_length=150)
-    last_name = models.CharField(blank=False, max_length=150)
-    company = models.CharField(blank=True, max_length=200)
+    first_name = models.CharField("prénom",blank=False, max_length=150)
+    last_name = models.CharField("nom", blank=False, max_length=150)
+    company = models.CharField("entreprise", blank=True, max_length=200)
     email = models.EmailField(blank=False, unique=True)
-    phone_number = models.CharField(blank=False, unique=True, max_length=12)
-    additional_information = models.CharField(blank=True, max_length= 1000)
+    phone_number = models.CharField("numéro de telephone", blank=False, unique=True, max_length=12)
+    additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
@@ -28,9 +28,9 @@ class Client(models.Model):
 
 class Contract(models.Model):
     client = models.ForeignKey(to=Client, on_delete=models.CASCADE, related_name="client")
-    signature_date = models.DateTimeField(auto_now_add=True)
-    amount = models.IntegerField(blank=False, validators=[MinValueValidator(0)])
-    additional_information = models.CharField(blank=True, max_length=1000)
+    signature_date = models.DateTimeField("date de signature", auto_now_add=True)
+    amount = models.IntegerField("montant du contrat (€)", blank=False, validators=[MinValueValidator(0)])
+    additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
 
     class Meta:
         unique_together = ('id', 'client')
@@ -52,10 +52,10 @@ class Event(models.Model):
 
     contract = models.OneToOneField(blank=False, to=Contract, on_delete=models.CASCADE, related_name="contract")
     support_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False, related_name="support_manager")
-    event_name = models.CharField(blank=False, max_length=100)
-    start_date = models.DateTimeField(blank=False)
-    end_date = models.DateTimeField(blank=False)
-    additional_information = models.CharField(blank=True, max_length=1000)
+    event_name = models.CharField("non de l'évènement", blank=False, max_length=100)
+    start_date = models.DateTimeField("date de début", blank=False)
+    end_date = models.DateTimeField("date de fin", blank=False)
+    additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
     status = models.CharField(choices=STATUS_CHOICES, max_length=30)
     def save(self, force_insert=False, force_update=False, using=None, #METTRE CA DANS UN FORMULAIRE ADAPTE
              update_fields=None,):
