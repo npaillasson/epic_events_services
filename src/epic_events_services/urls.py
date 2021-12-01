@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+BASE_URL = 'EpicEvents/CRM_acces/'
+
 urlpatterns = [
-    path('EpicEvents/CRM_acces/', admin.site.urls),
+    path(BASE_URL, admin.site.urls, name="administration_interface"),
 ]
 
 admin.site.site_header = "Epic Events Services"
