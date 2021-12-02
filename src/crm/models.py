@@ -11,6 +11,7 @@ class Client(models.Model):
     email = models.EmailField(blank=False, unique=True)
     phone_number = models.CharField("numéro de telephone", blank=False, unique=True, max_length=12)
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
+    is_client = models.BooleanField("prospect", default=False)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):

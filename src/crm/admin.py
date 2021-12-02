@@ -68,7 +68,7 @@ class ContractAdmin(admin.ModelAdmin):
         return self.model.objects.all()
 
 @admin.register(Client)
-class ContractAdmin(admin.ModelAdmin):
+class ClientAdmin(admin.ModelAdmin):
     model = Client
 
     def get_queryset(self, request):
@@ -83,5 +83,39 @@ class ContractAdmin(admin.ModelAdmin):
             for contract in contract_concerned:
                 client_list.append(contract.client.id)
             return Client.objects.filter(id__in=client_list)
-        return self.model.objects.all()
+        return self.model.objects.filter(is_client=True)
+
+def create_modeladmin(modeladmin, model, name = None):
+    class  Meta:
+        proxy = True
+        app_label = model._meta.app_label
+
+    attrs = {'__module__': '', 'Meta': Meta}
+
+    newmodel = type(name, (model,), attrs)
+
+    admin.site.register(newmodel, modeladmin)
+    return modeladmin
+
+print(ClientAdmin)
+class Prospect(ClientAdmin):
+    def get_queryset(self, request):
+        print("OK")
+        user = request.user
+        if is_in_group(user, 'support'):
+            events_concerned = request.user.support_manager.all()
+            contract_list = []
+            client_list = []
+            for event in events_concerned:
+                contract_list.append(event.contract.id)
+            contract_concerned = Contract.objects.filter(id__in=contract_list)
+            for contract in contract_concerned:
+                client_list.append(contract.client.id)
+            return Client.objects.filter(id__in=client_list)
+        return self.model.objects.filter(is_client=False)
+
+create_modeladmin(Prospect, model=Client, name="prospect")
+
+
+
 
