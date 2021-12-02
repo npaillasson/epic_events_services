@@ -70,6 +70,7 @@ class ContractAdmin(admin.ModelAdmin):
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     model = Client
+    list_display = ["first_name", "last_name", "company", "phone_number", "email"]
 
     def get_queryset(self, request):
         user = request.user
@@ -99,6 +100,7 @@ def create_modeladmin(modeladmin, model, name = None):
 
 print(ClientAdmin)
 class Prospect(ClientAdmin):
+
     def get_queryset(self, request):
         print("OK")
         user = request.user
