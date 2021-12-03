@@ -1,5 +1,6 @@
 import re
 import time
+from django.core import exceptions
 from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import User
@@ -14,15 +15,33 @@ def phone_number_validator(phone_number):
     else:
         raise ValidationError(detail="Ce numéro de téléphone n'est pas valide !")
 
-def team_validator(id, team):
+
+
+def is_support_validator(value):
     try:
-        User.objects.get(id=id, team=team)
+        User.objects.get(id=value, team="3")
     except ObjectDoesNotExist:
-        raise ValidationError(detail=f"Erreur: Cette personne n'existe pas ou ne fait pas partie de l'equipe {team}!"
-                              )
+        raise exceptions.ValidationError("Erreur: Cette personne n'existe pas ou "
+                                         "ne fait pas partie de la bonne équipe!")
+
+
+def api_team_validator(value):
+    try:
+        is_support_validator(value)
+    except exceptions.ValidationError as exception_to_return:
+        exception_to_return = ", ".join(exception_to_return)
+        detail = {"password": "{}".format(exception_to_return)}
+        raise ValidationError(detail=detail)
+    else:
+        return value
+
+
+def api_end_date_validator(start_date, end_date):
+    print(start_date < end_date)
+    if start_date > end_date:
+        raise ValidationError(detail="Erreur: La date de fin de l'évènement ne peut pas être avant la date de début!")
 
 def end_date_validator(start_date, end_date):
     print(start_date < end_date)
     if start_date > end_date:
-        raise ValidationError(detail ="Erreur: La date de fin de l'évènement ne peut pas être avant la date de début!")
-
+        raise exceptions.ValidationError("Erreur: La date de fin de l'évènement ne peut pas être avant la date de début!")

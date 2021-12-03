@@ -1,7 +1,10 @@
 from django.db import models
 from accounts.models import User
 from django.core.validators import MinValueValidator
-from .validators import team_validator, end_date_validator, phone_number_validator
+from rest_framework.exceptions import ValidationError
+from django.core import exceptions
+from .validators import is_support_validator, api_team_validator, end_date_validator, phone_number_validator,\
+    api_end_date_validator
 
 
 class Client(models.Model):
@@ -52,17 +55,22 @@ class Event(models.Model):
     ]
 
     contract = models.OneToOneField(blank=False, to=Contract, on_delete=models.CASCADE, related_name="contract")
-    support_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False, related_name="support_manager")
+    support_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False, related_name="support_manager",
+                                        validators=[is_support_validator])
     event_name = models.CharField("non de l'évènement", blank=False, max_length=100)
     start_date = models.DateTimeField("date de début", blank=False)
     end_date = models.DateTimeField("date de fin", blank=False)
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
     status = models.CharField(choices=STATUS_CHOICES, max_length=30)
-    def save(self, force_insert=False, force_update=False, using=None, #METTRE CA DANS UN FORMULAIRE ADAPTE
+
+    def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
-        team_validator(id=self.support_manager.id, team="3")
-        end_date_validator(self.start_date, self.end_date)
+        api_team_validator(value=self.support_manager.id)
+        api_end_date_validator(self.start_date, self.end_date) #UTILE?
         super().save()
+
+    def clean(self):
+        end_date_validator(self.start_date, self.end_date)
 
     class Meta:
         #unique_together = ('id', 'contract')

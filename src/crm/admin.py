@@ -42,6 +42,11 @@ class EventAdmin(admin.ModelAdmin):
 @admin.register(Contract)
 class ContractAdmin(admin.ModelAdmin):
     model = Contract
+
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context['adminform'].form.fields['client'].queryset = Client.objects.filter(is_client=True)
+        return super(ContractAdmin, self).render_change_form(request, context)
+
     def telephone_du_client(self, inst):
         return inst.client.phone_number
     telephone_du_client.short_description = "téléphone du client"
@@ -52,6 +57,7 @@ class ContractAdmin(admin.ModelAdmin):
     def evenement(self, inst):
         return inst.contract
     evenement.short_description = "évènement"
+
     list_display = ["id", "client", "signature_date", "amount", "telephone_du_client", "entreprise", "email_du_client",
                     "evenement"]
     readonly_fields = ["telephone_du_client", "entreprise", "email_du_client",
