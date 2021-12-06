@@ -3,12 +3,6 @@ from .models import Client, Contract, Event
 from accounts.custom_functions import is_in_group
 from accounts.models import User
 
-#admin.site.register(Client)
-#admin.site.register(Contract)
-#admin.site.register(Event)
-
-# Register your models here.
-
 @admin.action(description='Convertir le(s) prospect(s) en client(s)')
 def convert_client(Prospect, request, queryset):
     queryset.update(is_client=True)
@@ -34,7 +28,7 @@ class EventAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         list_fields = ["telephone_du_client", "entreprise", "email_du_client", "email_du_support_manager"]
-        if is_in_group(request.user, "support"):
+        if is_in_group(request.user, "support") or is_in_group(request.user, "vente"):
             list_fields.append("support_manager")
             return list_fields
         return list_fields
@@ -85,13 +79,31 @@ class ContractAdmin(admin.ModelAdmin):
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     model = Client
-    list_display = ["first_name", "last_name", "company", "phone_number", "email"]
-    #exclude = ["is_client"]
+    list_display = ["first_name", "last_name", "company", "phone_number", "email", "client_manager"]
+
+    def commercial_manager_email(self, inst):
+        return inst.client_manager.email
+    commercial_manager_email.short_description = "email du responsable commercial"
+
+    def get_readonly_fields(self, request, obj=None):
+        list_fields = ["commercial_manager_email"]
+        if is_in_group(request.user, "support") or is_in_group(request.user, "vente"):
+            list_fields.append("client_manager")
+            return list_fields
+        return list_fields
+
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context['adminform'].form.fields['client_manager'].queryset = User.objects.filter(team="2")
+        return super(ClientAdmin, self).render_change_form(request, context, add=True, change=True)
 
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = ("is_client",)
         form = super(ClientAdmin, self).get_form(request, obj, **kwargs)
         return form
+
+    def save_model(self, request, obj, form, change):
+        obj.is_client = True
+        super(ClientAdmin, self).save_model(request, obj, form, change)
 
     def get_queryset(self, request):
         user = request.user
@@ -126,6 +138,9 @@ class Prospect(ClientAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super(ClientAdmin, self).get_form(request, obj, **kwargs)
         return form
+
+    def save_model(self, request, obj, form, change):
+        super(ClientAdmin, self).save_model(request, obj, form, change)
 
     def get_queryset(self, request):
         print("OK")

@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator
 from rest_framework.exceptions import ValidationError
 from django.core import exceptions
 from .validators import is_support_validator, api_team_validator, end_date_validator, phone_number_validator,\
-    api_end_date_validator
+    api_end_date_validator, is_sale_validator
 
 
 class Client(models.Model):
@@ -14,6 +14,9 @@ class Client(models.Model):
     email = models.EmailField(blank=False, unique=True)
     phone_number = models.CharField("numéro de telephone", blank=False, unique=True, max_length=12)
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
+    client_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False,
+                                       verbose_name="responsable commercial", related_name="client_manager",
+                                       validators=[is_sale_validator])
     is_client = models.BooleanField("Convertir le prospect en client", default=False)
 
     def save(self, force_insert=False, force_update=False, using=None,
@@ -27,7 +30,6 @@ class Client(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-
 
 
 class Contract(models.Model):
