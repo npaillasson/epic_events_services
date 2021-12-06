@@ -14,7 +14,7 @@ class Client(models.Model):
     email = models.EmailField(blank=False, unique=True)
     phone_number = models.CharField("numéro de telephone", blank=False, unique=True, max_length=12)
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
-    is_client = models.BooleanField("prospect", default=False)
+    is_client = models.BooleanField("Convertir le prospect en client", default=False)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
@@ -57,7 +57,7 @@ class Event(models.Model):
     contract = models.OneToOneField(blank=False, to=Contract, on_delete=models.CASCADE, related_name="contract")
     support_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False, related_name="support_manager",
                                         validators=[is_support_validator])
-    event_name = models.CharField("non de l'évènement", blank=False, max_length=100)
+    event_name = models.CharField("nom de l'évènement", blank=False, max_length=100)
     start_date = models.DateTimeField("date de début", blank=False)
     end_date = models.DateTimeField("date de fin", blank=False)
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)

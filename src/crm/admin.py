@@ -9,9 +9,18 @@ from accounts.models import User
 
 # Register your models here.
 
+@admin.action(description='Convertir le(s) prospect(s) en client(s)')
+def convert_client(Prospect, request, queryset):
+    queryset.update(is_client=True)
+
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     model = Event
+
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context['adminform'].form.fields['support_manager'].queryset = User.objects.filter(team="3")
+        return super(EventAdmin, self).render_change_form(request, context, add=True, change=True)
+
     def telephone_du_client(self, inst):
         return inst.contract.client.phone_number
     telephone_du_client.short_description = "téléphone du client"
@@ -45,7 +54,7 @@ class ContractAdmin(admin.ModelAdmin):
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context['adminform'].form.fields['client'].queryset = Client.objects.filter(is_client=True)
-        return super(ContractAdmin, self).render_change_form(request, context)
+        return super(ContractAdmin, self).render_change_form(request, context, add=True, change=True)
 
     def telephone_du_client(self, inst):
         return inst.client.phone_number
@@ -77,6 +86,12 @@ class ContractAdmin(admin.ModelAdmin):
 class ClientAdmin(admin.ModelAdmin):
     model = Client
     list_display = ["first_name", "last_name", "company", "phone_number", "email"]
+    #exclude = ["is_client"]
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.exclude = ("is_client",)
+        form = super(ClientAdmin, self).get_form(request, obj, **kwargs)
+        return form
 
     def get_queryset(self, request):
         user = request.user
@@ -106,6 +121,11 @@ def create_modeladmin(modeladmin, model, name = None):
 
 print(ClientAdmin)
 class Prospect(ClientAdmin):
+    actions = [convert_client]
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ClientAdmin, self).get_form(request, obj, **kwargs)
+        return form
 
     def get_queryset(self, request):
         print("OK")
@@ -123,6 +143,8 @@ class Prospect(ClientAdmin):
         return self.model.objects.filter(is_client=False)
 
 create_modeladmin(Prospect, model=Client, name="prospect")
+
+
 
 
 
