@@ -25,4 +25,5 @@ urlpatterns = [
 admin.site.site_header = "Epic Events Services"
 admin.site.index_title = "Epic Events CRM"
 admin.site.site_title = "Epic Events CRM"
+admin.AdminSite.site_url = None
 
