@@ -13,7 +13,7 @@ def convert_client(Prospect, request, queryset):
 class EventAdmin(admin.ModelAdmin):
     model = Event
 
-    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+    def render_change_form(self, request, context, add=True, change=True, form_url='', obj=None):
         if request.user.team == "1":
             context['adminform'].form.fields['support_manager'].queryset = User.objects.filter(team="3")
         return super(EventAdmin, self).render_change_form(request, context, add=True, change=True)
@@ -37,21 +37,18 @@ class EventAdmin(admin.ModelAdmin):
 
 
     def get_readonly_fields(self, request, obj=None):
-        list_fields = ["telephone_du_client", "entreprise", "email_du_client", "client", "email_du_support_manager",
-                       "client_manager", "email_du_client_manager"]
+        list_fields = ["client", "email_du_client", "telephone_du_client", "entreprise",
+                       "client_manager","email_du_client_manager"]
         if is_in_group(request.user, "support") or is_in_group(request.user, "vente"):
             list_fields.append("support_manager")
+            list_fields.append("email_du_support_manager")
             return list_fields
-        return list_fields
+        else:
+            list_fields.append("email_du_support_manager")
+            return list_fields
 
     list_display = ["id", "event_name", "status", "support_manager","start_date", "end_date",
                     "contract", "telephone_du_client", "entreprise", "email_du_client"]
-
-    def get_queryset(self, request):
-        #user = request.user
-        #if is_in_group(user, 'support'):
-        #    return request.user.support_manager.all()
-        return self.model.objects.all()
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -66,6 +63,7 @@ class EventAdmin(admin.ModelAdmin):
 @admin.register(Contract)
 class ContractAdmin(admin.ModelAdmin):
     model = Contract
+
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -99,29 +97,12 @@ class ContractAdmin(admin.ModelAdmin):
                     "evenement"]
 
     def get_queryset(self, request):
-        user = request.user
-        #if is_in_group(user, 'support'):
-        #    events_concerned = request.user.support_manager.all()
-        #    contract_list = []
-        #    for event in events_concerned:
-        #        contract_list.append(event.contract.id)
-        #    return Contract.objects.filter(id__in=contract_list)
         return self.model.objects.all()
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     model = Client
     list_display = ["first_name", "last_name", "company", "phone_number", "email", "client_manager"]
-
-    #def event(self, inst):
-    #    contracts = Contract.objects.filter(client=inst)
-    #    events_list = Event.objects.filter(contract__in=contracts)
-    #    list_to_return = []
-    #    for event in events_list:
-    #        list_to_return.append(f"<li> <a href={reverse('admin:crm_event_change', args=[event.id])}>{event}</li>")
-    #    value_to_return = f"<ul style='list-style-type: circle;'>{''.join(list_to_return)}</ul>"
-    #    print(value_to_return)
-    #    return mark_safe(value_to_return)
 
     def commercial_manager_email(self, inst):
         return inst.client_manager.email
@@ -157,17 +138,6 @@ class ClientAdmin(admin.ModelAdmin):
         super(ClientAdmin, self).save_model(request, obj, form, change)
 
     def get_queryset(self, request):
-        user = request.user
-        #if is_in_group(user, 'support'):
-        #    events_concerned = request.user.support_manager.all()
-        #    contract_list = []
-        #    client_list = []
-        #    for event in events_concerned:
-        #        contract_list.append(event.contract.id)
-        #    contract_concerned = Contract.objects.filter(id__in=contract_list)
-        #    for contract in contract_concerned:
-        #        client_list.append(contract.client.id)
-        #    return Client.objects.filter(id__in=client_list)
         return self.model.objects.filter(is_client=True)
 
 def create_modeladmin(modeladmin, model, name = None):
@@ -182,7 +152,7 @@ def create_modeladmin(modeladmin, model, name = None):
     admin.site.register(newmodel, modeladmin)
     return modeladmin
 
-print(ClientAdmin)
+
 class Prospect(ClientAdmin):
     actions = [convert_client]
 
@@ -194,23 +164,6 @@ class Prospect(ClientAdmin):
         super(ClientAdmin, self).save_model(request, obj, form, change)
 
     def get_queryset(self, request):
-        user = request.user
-        #if is_in_group(user, 'support'):
-        #    events_concerned = request.user.support_manager.all()
-        #    contract_list = []
-        #    client_list = []
-        #    for event in events_concerned:
-        #        contract_list.append(event.contract.id)
-        #    contract_concerned = Contract.objects.filter(id__in=contract_list)
-        #    for contract in contract_concerned:
-        #        client_list.append(contract.client.id)
-        #    return Client.objects.filter(id__in=client_list)
         return self.model.objects.filter(is_client=False)
 
 create_modeladmin(Prospect, model=Client, name="prospect")
-
-
-
-
-
-
