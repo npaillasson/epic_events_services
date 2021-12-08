@@ -1,8 +1,14 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, TEAM_CHOICES
 
+class ChoiceField(serializers.ChoiceField):
+    def to_representation(self, obj):
+        return self._choices[obj]
 
-class UserSerializer(serializers.ModelSerializer):
+class AdminUserSerializer(serializers.ModelSerializer):
+
+    team = ChoiceField(TEAM_CHOICES)
+
     class Meta:
         model = User
         fields = [
@@ -11,5 +17,19 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "password",
+            "team",
+        ]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    team = ChoiceField(TEAM_CHOICES)
+
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
             "team",
         ]
