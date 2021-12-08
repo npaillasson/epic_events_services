@@ -12,6 +12,7 @@ TEAM_CHOICES = [
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, first_name, last_name, team):
+        custom_password_validator(password=password)
         user = self.model(first_name=first_name,
                           email=email,
                           last_name=last_name,
@@ -22,7 +23,7 @@ class CustomUserManager(BaseUserManager):
 
         user.save()
         assignment_of_groups(team, user)
-        user.set_password(custom_password_validator(password=password))
+        user.set_password(password)
         user.save(using=self._db)
         return user
 

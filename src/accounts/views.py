@@ -16,14 +16,13 @@ class UserCreate(viewsets.ModelViewSet):
     serializer_class = AdminUserSerializer
 
     def perform_create(self, serializer):
-            user = User.objects.create_user(
-                email=serializer.validated_data["email"],
-                first_name=serializer.validated_data["first_name"],
-                last_name=serializer.validated_data["last_name"],
-                team=serializer.validated_data["team"],
-            )
-            user.set_password(serializer.validated_data["password"])
-            user.save()
+        User.objects.create_user(
+            email=serializer.validated_data["email"],
+            password=serializer.validated_data["password"],
+            first_name=serializer.validated_data["first_name"],
+            last_name=serializer.validated_data["last_name"],
+            team=serializer.validated_data["team"],
+        )
 
 class DisplayUser(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, CanChangeCollaborators]
@@ -56,33 +55,10 @@ class DisplayUser(viewsets.ModelViewSet):
 
 
         if serializer.is_valid():
-            print(serializer.data)
             partial_user_update(serializer, request.data, self.object)
-            response = {
-                'status': 'success',
-                'code': status.HTTP_200_OK,
-                'message': 'Password updated successfully',
-                'data': []
-            }
-
-            return Response(response)
+            return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    #def perform_update(self, serializer):
-    #    print(serializer)
-
-    #   serializer.save(serializer.data["password"]
-    #    custom_password_validator(serializer.validated_data["password"])
-
-
-
-    #def update(self, request, *args, **kwargs):
-    #    queryset = get_user(user_id=self.kwargs["pk"])
-    #    serializer = AdminUserSerializer(queryset, request.data, partial=True)
-    #    serializer.is_valid(raise_exception=True)
-    #    self.perform_update(serializer)
-    #    return Response(serializer.data)
 
 
 # Create your views here.
