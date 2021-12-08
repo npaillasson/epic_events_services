@@ -12,7 +12,17 @@ def phone_number_validator(phone_number):
     if FRENCH_PHONE_NUMBER_PATTERN.match(phone_number):
         return phone_number
     else:
-        raise ValidationError(detail="Ce numéro de téléphone n'est pas valide !")
+        raise exceptions.ValidationError("Ce numéro de téléphone n'est pas valide !")
+
+def api_phone_number_validator(value):
+    try:
+        phone_number_validator(value)
+    except exceptions.ValidationError as exception_to_return:
+        exception_to_return = ", ".join(exception_to_return)
+        detail = {"phone_number": "{}".format(exception_to_return)}
+        raise ValidationError(detail=detail)
+    else:
+        return value
 
 
 def is_in_group(value, group):
@@ -28,12 +38,12 @@ def is_support_validator(value):
 def is_sale_validator(value):
     is_in_group(value, "2")
 
-def api_team_validator(value):
+def api_team_validator(value, group):
     try:
-        is_support_validator(value)
+        is_in_group(value, group)
     except exceptions.ValidationError as exception_to_return:
         exception_to_return = ", ".join(exception_to_return)
-        detail = {"password": "{}".format(exception_to_return)}
+        detail = {"team": "{}".format(exception_to_return)}
         raise ValidationError(detail=detail)
     else:
         return value
