@@ -3,12 +3,13 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import viewsets
 from .serializers import UserSerializer
 from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from .models import User
-
+from .permissions import CanAddCollaborators
 
 
 class UserCreate(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, CanAddCollaborators]
     serializer_class = UserSerializer
 
     def perform_create(self, serializer):
