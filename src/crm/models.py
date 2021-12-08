@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator
 from rest_framework.exceptions import ValidationError
 from django.core import exceptions
 from .validators import is_support_validator, api_team_validator, end_date_validator, phone_number_validator,\
-    api_end_date_validator, is_sale_validator
+    api_end_date_validator, is_sale_validator, api_phone_number_validator
 
 
 class Client(models.Model):
@@ -12,7 +12,7 @@ class Client(models.Model):
     last_name = models.CharField("nom", blank=False, max_length=150)
     company = models.CharField("entreprise", blank=True, max_length=200)
     email = models.EmailField(blank=False, unique=True)
-    phone_number = models.CharField("numéro de telephone", blank=False, unique=True, max_length=12)
+    phone_number = models.CharField("numéro de telephone", blank=False, unique=True, max_length=12, validators=[phone_number_validator])
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
     client_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False,
                                        verbose_name="responsable commercial", related_name="client_manager",
@@ -21,7 +21,7 @@ class Client(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
-        self.phone_number = phone_number_validator(self.phone_number)
+        self.phone_number = api_phone_number_validator(self.phone_number)
         super().save()
 
     class Meta:
@@ -67,7 +67,7 @@ class Event(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
-        api_team_validator(value=self.support_manager.id)
+        api_team_validator(value=self.support_manager.id, group="3")
         api_end_date_validator(self.start_date, self.end_date) #UTILE?
         super().save()
 
