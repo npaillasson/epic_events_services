@@ -14,12 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 BASE_URL = 'EpicEvents/CRM_acces/'
 
 urlpatterns = [
     path(BASE_URL, admin.site.urls, name="administration_interface"),
+    path("api-auth/", include(("accounts.urls", "accounts"), namespace="accounts")),
 ]
 
 admin.site.site_header = "Epic Events Services"
@@ -27,3 +28,4 @@ admin.site.index_title = "Epic Events CRM"
 admin.site.site_title = "Epic Events CRM"
 admin.AdminSite.site_url = None
 
+#path("api/", include(("crm.urls", "crm"), namespace="crm")),
