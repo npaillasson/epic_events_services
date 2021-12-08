@@ -17,7 +17,6 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('first_name', 'last_name', 'email', 'team', 'groups', "username")
 
     def save(self, commit=True):
-        print("SAVEMODEL")
         user = super(CustomUserCreationForm, self).save(commit=False)
         data = self.cleaned_data
         user = get_user_model().objects.create_user(email=data["email"],password=data["password1"],

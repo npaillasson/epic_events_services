@@ -5,13 +5,16 @@ class ChoiceField(serializers.ChoiceField):
     def to_representation(self, obj):
         return self._choices[obj]
 
+
 class AdminUserSerializer(serializers.ModelSerializer):
 
     team = ChoiceField(TEAM_CHOICES)
+    username = serializers.ReadOnlyField()
 
     class Meta:
         model = User
         fields = [
+            "id",
             "username",
             "first_name",
             "last_name",
@@ -27,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            "id",
             "username",
             "first_name",
             "last_name",

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 
 
+
 def is_in_group(user, group):
     return user.groups.filter(name=str(group)).exists()
 
@@ -40,3 +41,4 @@ def assignment_of_groups(team, user):
             group = Group.objects.get(name="support")
             group.user_set.add(user)
             group.save()
+

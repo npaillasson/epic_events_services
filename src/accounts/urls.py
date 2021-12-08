@@ -20,7 +20,7 @@ urlpatterns = [
             {
                 "get": "retrieve",
                 "delete": "destroy",
-                "put": "update",
+                "patch": "update",
             }
         ),
         name="user_details",
