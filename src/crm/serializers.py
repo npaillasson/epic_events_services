@@ -9,10 +9,14 @@ class ClientListSerializer(serializers.ModelSerializer):
     client_manager_username = serializers.SerializerMethodField()
     company = serializers.CharField(allow_blank=True, required=True)
     additional_information = serializers.CharField(allow_blank=True, required=True)
-    is_client = serializers.CharField(required=True)
+    is_client = serializers.BooleanField(required=True)
 
     def get_client_manager_username(self, obj):
-        return str(obj.client_manager)
+        try:
+            return str(obj.client_manager)
+        except AttributeError:
+            user = User.objects.get(id=self.initial_data["client_manager"])
+            return user.username
 
     class Meta:
         model = Client

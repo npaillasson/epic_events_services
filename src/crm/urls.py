@@ -19,6 +19,7 @@ urlpatterns = [
             {
                 "get": "retrieve",
                 "patch": "update",
+                "delete": "destroy",
             }
         )
     )

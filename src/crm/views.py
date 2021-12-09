@@ -4,10 +4,11 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Event, Client, Contract
 from .serializers import ClientListSerializer
 from .api_utilities import partial_update
+from .permissions import CanManageClient
 
 class DisplayClient(viewsets.ModelViewSet):
     queryset = Client.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CanManageClient]
     serializer_class = ClientListSerializer
     filterset_fields = [
             "first_name",
@@ -32,6 +33,7 @@ class DisplayClient(viewsets.ModelViewSet):
             client_manager=serializer.validated_data["client_manager"],
             is_client=serializer.validated_data["is_client"],
         )
+        return Response(serializer.data)
 
 
     def list(self, request, *args, **kwargs):
@@ -46,8 +48,8 @@ class DisplayClient(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
-        user = Client.objects.get(id=self.kwargs["pk"])
-        self.perform_destroy(user)
+        client = Client.objects.get(id=self.kwargs["pk"])
+        self.perform_destroy(client)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
