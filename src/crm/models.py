@@ -21,7 +21,8 @@ class Client(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
-        self.phone_number = api_phone_number_validator(self.phone_number)
+        api_phone_number_validator(self.phone_number)
+        api_team_validator(self.client_manager, "2")
         super().save()
 
     class Meta:
@@ -67,15 +68,14 @@ class Event(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
-        api_team_validator(value=self.support_manager.id, group="3")
-        api_end_date_validator(self.start_date, self.end_date) #UTILE?
+        api_team_validator(value=self.support_manager, group="3")
+        api_end_date_validator(self.start_date, self.end_date)
         super().save()
 
     def clean(self):
         end_date_validator(self.start_date, self.end_date)
 
     class Meta:
-        #unique_together = ('id', 'contract')
         verbose_name = "Évènement"
         verbose_name_plural = f"{verbose_name}s"
 

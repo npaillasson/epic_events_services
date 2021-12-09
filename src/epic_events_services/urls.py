@@ -21,11 +21,10 @@ BASE_URL = 'EpicEvents/CRM_acces/'
 urlpatterns = [
     path(BASE_URL, admin.site.urls, name="administration_interface"),
     path("api-auth/", include(("accounts.urls", "accounts"), namespace="accounts")),
+    path("api/", include(("crm.urls", "crm"), namespace="crm")),
 ]
 
 admin.site.site_header = "Epic Events Services"
 admin.site.index_title = "Epic Events CRM"
 admin.site.site_title = "Epic Events CRM"
 admin.AdminSite.site_url = None
-
-#path("api/", include(("crm.urls", "crm"), namespace="crm")),

@@ -27,7 +27,7 @@ def api_phone_number_validator(value):
 
 def is_in_group(value, group):
     try:
-        User.objects.get(id=value, team=group)
+        User.objects.get(id=value.id, team=group)
     except ObjectDoesNotExist:
         raise exceptions.ValidationError("Erreur: Cette personne n'existe pas ou "
                                          "ne fait pas partie de la bonne équipe!")
