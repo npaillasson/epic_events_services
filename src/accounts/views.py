@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .serializers import UserSerializer, AdminUserSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import User
 from .permissions import CanAddCollaborators, CanChangeCollaborators
 from .api_utilities import get_user, partial_user_update
@@ -25,15 +26,19 @@ class UserCreate(viewsets.ModelViewSet):
         )
 
 class DisplayUser(viewsets.ModelViewSet):
+    queryset = User.objects.all()
     permission_classes = [IsAuthenticated, CanChangeCollaborators]
     serializer_class = UserSerializer
+    filterset_fields = ('team', 'username', 'email', 'first_name', 'last_name')
+
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        queryset = self.queryset
+        filter_backends = self.filter_queryset(queryset)
         if request.user.team == "1":
-            serializer = AdminUserSerializer(queryset, many=True)
+            serializer = AdminUserSerializer(filter_backends, many=True)
         else:
-            serializer = UserSerializer(queryset, many=True)
+            serializer = UserSerializer(filter_backends, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
@@ -59,17 +64,3 @@ class DisplayUser(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
-        queryset = User.objects.all()
-        team = self.request.query_params.get('team')
-        print(team)
-        if team is not None:
-            queryset = queryset.filter(team=team)
-        return queryset
-
-
-# Create your views here.
