@@ -29,7 +29,7 @@ class DisplayUser(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def list(self, request, *args, **kwargs):
-        queryset = get_user(user_id="all")
+        queryset = self.get_queryset()
         if request.user.team == "1":
             serializer = AdminUserSerializer(queryset, many=True)
         else:
@@ -53,12 +53,23 @@ class DisplayUser(viewsets.ModelViewSet):
         self.object = get_user(user_id=self.kwargs["pk"])
         serializer = AdminUserSerializer(self.object, data=request.data, partial=True)
 
-
         if serializer.is_valid():
             partial_user_update(serializer, request.data, self.object)
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = User.objects.all()
+        team = self.request.query_params.get('team')
+        print(team)
+        if team is not None:
+            queryset = queryset.filter(team=team)
+        return queryset
 
 
 # Create your views here.
