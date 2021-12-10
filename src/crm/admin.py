@@ -16,6 +16,7 @@ class EventAdmin(admin.ModelAdmin):
     def render_change_form(self, request, context, add=True, change=True, form_url='', obj=None):
         if request.user.team == "1":
             context['adminform'].form.fields['support_manager'].queryset = User.objects.filter(team="3")
+            context['adminform'].form.fields['contract'].queryset = Contract.objects.filter(is_signed=True)
         return super(EventAdmin, self).render_change_form(request, context, add=True, change=True)
 
     def telephone_du_client(self, inst):
@@ -78,6 +79,15 @@ class ContractAdmin(admin.ModelAdmin):
             context['adminform'].form.fields['client'].queryset = Client.objects.filter(is_client=True)
         return super(ContractAdmin, self).render_change_form(request, context, add=True, change=True)
 
+    def save_model(self, request, obj, form, change):
+        obj.is_signed = True
+        super(ContractAdmin, self).save_model(request, obj, form, change)
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.exclude = ("is_signed",)
+        form = super(ContractAdmin, self).get_form(request, obj, **kwargs)
+        return form
+
     def telephone_du_client(self, inst):
         return inst.client.phone_number
     telephone_du_client.short_description = "téléphone du client"
@@ -93,11 +103,15 @@ class ContractAdmin(admin.ModelAdmin):
 
     list_display = ["id", "client", "signature_date", "amount", "telephone_du_client", "entreprise", "email_du_client",
                     "evenement"]
-    readonly_fields = ["signature_date", "telephone_du_client", "entreprise", "email_du_client",
-                    "evenement"]
+
+    def get_readonly_fields(self, request, obj=None):
+        list_fields = ["signature_date", "telephone_du_client", "entreprise", "email_du_client",
+                       "evenement", "time_created", "time_changed"]
+        return list_fields
 
     def get_queryset(self, request):
-        return self.model.objects.all()
+        return self.model.objects.filter(is_signed=True)
+
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
@@ -109,7 +123,7 @@ class ClientAdmin(admin.ModelAdmin):
     commercial_manager_email.short_description = "email du responsable commercial"
 
     def get_readonly_fields(self, request, obj=None):
-        list_fields = ["commercial_manager_email"]
+        list_fields = ["commercial_manager_email", "time_created", "time_changed"]
         if is_in_group(request.user, "support") or is_in_group(request.user, "vente"):
             list_fields.append("client_manager")
             return list_fields
@@ -167,3 +181,21 @@ class Prospect(ClientAdmin):
         return self.model.objects.filter(is_client=False)
 
 create_modeladmin(Prospect, model=Client, name="prospect")
+
+class ProtoContract(ContractAdmin):
+
+
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ContractAdmin, self).get_form(request, obj, **kwargs)
+        return form
+
+    def save_model(self, request, obj, form, change):
+        super(ContractAdmin, self).save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        return self.model.objects.filter(is_signed=False)
+
+
+create_modeladmin(ProtoContract, model=Contract, name="Pré-contrat")
+
