@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from accounts.models import User
 from django.core.validators import MinValueValidator
@@ -17,7 +18,9 @@ class Client(models.Model):
     client_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False,
                                        verbose_name="responsable commercial", related_name="client_manager",
                                        validators=[is_sale_validator])
-    is_client = models.BooleanField("Convertir le prospect en client", default=False)
+    is_client = models.BooleanField("Convertir le prospect en client", blank=False, default=False)
+    time_created = models.DateTimeField("créer le", auto_now_add=True)
+    time_changed = models.DateTimeField("dernière modification", auto_now=True)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):
@@ -38,6 +41,14 @@ class Contract(models.Model):
     signature_date = models.DateTimeField("date de signature", auto_now_add=True)
     amount = models.IntegerField("montant du contrat (€)", blank=False, validators=[MinValueValidator(0)])
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
+    is_signed = models.BooleanField("convertir le contrat en contrat signé", blank=False, default=False)
+    time_created = models.DateTimeField("créer le", auto_now_add=True)
+    time_changed = models.DateTimeField("dernière modification", auto_now=True)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        print(self.is_signed)
+        super().save()
 
     class Meta:
         unique_together = ('id', 'client')
@@ -65,6 +76,8 @@ class Event(models.Model):
     end_date = models.DateTimeField("date de fin", blank=False)
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
     status = models.CharField(choices=STATUS_CHOICES, max_length=30)
+    time_created = models.DateTimeField("créer le", auto_now_add=True)
+    time_changed = models.DateTimeField("dernière modification", auto_now=True)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None,):

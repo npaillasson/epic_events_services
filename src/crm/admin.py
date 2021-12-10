@@ -38,7 +38,7 @@ class EventAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         list_fields = ["client", "email_du_client", "telephone_du_client", "entreprise",
-                       "client_manager","email_du_client_manager"]
+                       "client_manager", "email_du_client_manager", "time_created", "time_changed"]
         if is_in_group(request.user, "support") or is_in_group(request.user, "vente"):
             list_fields.append("support_manager")
             list_fields.append("email_du_support_manager")

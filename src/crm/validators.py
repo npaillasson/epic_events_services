@@ -26,11 +26,13 @@ def api_phone_number_validator(value):
 
 
 def is_in_group(value, group):
+    if type(value) == User:
+        value = value.id
     try:
-        User.objects.get(id=value.id, team=group)
+        User.objects.get(id=value, team=group)
     except ObjectDoesNotExist:
-        raise exceptions.ValidationError("Erreur: Cette personne n'existe pas ou "
-                                         "ne fait pas partie de la bonne équipe!")
+        raise exceptions.ValidationError("Erreur: Cette personne n'existe pas"
+                                         " ou ne fait pas partie de la bonne équipe!")
 
 def is_support_validator(value):
     is_in_group(value, "3")
