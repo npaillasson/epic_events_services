@@ -55,7 +55,7 @@ class Contract(models.Model):
                 raise ValidationError(detail="is_signed: Erreur! Une fois signé un contrat ne peut pas être invalidé")
         elif not self.id:
             if self.is_signed:
-                self.signature_date = datetime.datetime
+                self.signature_date = datetime.datetime.now()
                 return super().save()
         return super().save()
 
