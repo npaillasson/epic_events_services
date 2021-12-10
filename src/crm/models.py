@@ -38,7 +38,7 @@ class Client(models.Model):
 
 class Contract(models.Model):
     client = models.ForeignKey(to=Client, on_delete=models.CASCADE, related_name="client")
-    signature_date = models.DateTimeField("date de signature", auto_now_add=True)
+    signature_date = models.DateTimeField("date de signature", default=None)
     amount = models.IntegerField("montant du contrat (€)", blank=False, validators=[MinValueValidator(0)])
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
     is_signed = models.BooleanField("convertir le contrat en contrat signé", blank=False, default=False)
@@ -47,8 +47,18 @@ class Contract(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        print(self.is_signed)
-        super().save()
+        if self.id:
+            if not Contract.objects.get(id=self.id).is_signed and self.is_signed:
+                self.signature_date = datetime.datetime.now()
+                super().save()
+            if Contract.objects.get(id=self.id).is_signed and not self.is_signed:
+                raise ValidationError(detail="is_signed: Erreur! Une fois signé un contrat ne peut pas être invalidé")
+        elif not self.id:
+            if self.is_signed:
+                self.signature_date = datetime.datetime
+                super().save()
+        else:
+            super().save()
 
     class Meta:
         unique_together = ('id', 'client')

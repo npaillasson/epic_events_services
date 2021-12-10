@@ -93,7 +93,7 @@ class ContractAdmin(admin.ModelAdmin):
 
     list_display = ["id", "client", "signature_date", "amount", "telephone_du_client", "entreprise", "email_du_client",
                     "evenement"]
-    readonly_fields = ["telephone_du_client", "entreprise", "email_du_client",
+    readonly_fields = ["signature_date", "telephone_du_client", "entreprise", "email_du_client",
                     "evenement"]
 
     def get_queryset(self, request):
