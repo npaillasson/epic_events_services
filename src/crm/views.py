@@ -1,10 +1,12 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from .models import Event, Client, Contract
-from .serializers import ClientListSerializer
-from .api_utilities import partial_update
-from .permissions import CanManageClient
+from .serializers import ClientListSerializer, ContractSerializer
+from .api_utilities import partial_update, get_client, get_contract
+from .permissions import CanManageClient, CanManageContract, CanManageEvent
 
 class DisplayClient(viewsets.ModelViewSet):
     queryset = Client.objects.all()
@@ -43,18 +45,67 @@ class DisplayClient(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
-        queryset = Client.objects.get(id=self.kwargs["pk"])
+        queryset = get_client(id=self.kwargs["pk"])
         serializer = ClientListSerializer(queryset)
         return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
-        client = Client.objects.get(id=self.kwargs["pk"])
+        client = get_client(id=self.kwargs["pk"])
         self.perform_destroy(client)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
-        self.object = Client.objects.get(id=self.kwargs["pk"])
+        self.object = get_client(id=self.kwargs["pk"])
         serializer = ClientListSerializer(self.object, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            partial_update(serializer, request.data, self.object)
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DisplayContract(viewsets.ModelViewSet):
+    queryset = Contract.objects.all()
+    permission_classes = [IsAuthenticated, CanManageContract]
+    serializer_class = ContractSerializer
+    filterset_fields = [
+            "client",
+            "signature_date",
+            "amount",
+            "additional_information",
+            "is_signed",
+            ]
+
+    def perform_create(self, serializer):
+
+        Contract.objects.create(
+            client=serializer.validated_data["client"],
+            amount = serializer.validated_data["amount"],
+            additional_information = serializer.validated_data["additional_information"],
+            is_signed = serializer.validated_data["is_signed"]
+        )
+        return Response(serializer.data)
+
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.queryset
+        filter_backends = self.filter_queryset(queryset)
+        serializer = ContractSerializer(filter_backends, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        queryset = get_contract(id=self.kwargs["pk"])
+        serializer = ContractSerializer(queryset)
+        return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        contract = get_contract(id=self.kwargs["pk"])
+        self.perform_destroy(contract)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def update(self, request, *args, **kwargs):
+        self.object = get_contract(id=self.kwargs["pk"])
+        serializer = ContractSerializer(self.object, data=request.data, partial=True)
 
         if serializer.is_valid():
             partial_update(serializer, request.data, self.object)

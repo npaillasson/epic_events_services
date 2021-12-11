@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import DisplayClient
+from .views import DisplayClient, DisplayContract
 
 urlpatterns = [
     path(
@@ -22,5 +22,24 @@ urlpatterns = [
                 "delete": "destroy",
             }
         )
-    )
+    ),
+    path(
+        "contracts/",
+        DisplayContract.as_view(
+            {
+                "get": "list",
+                "post": "create",
+            }
+        )
+    ),
+    path(
+        "contracts/<int:pk>/",
+        DisplayContract.as_view(
+            {
+                "get": "retrieve",
+                "patch": "update",
+                "delete": "destroy",
+            }
+        )
+    ),
 ]
