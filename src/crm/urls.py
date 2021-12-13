@@ -21,7 +21,7 @@ urlpatterns = [
                 "patch": "update",
                 "delete": "destroy",
             }
-        )
+        ),
     ),
     path(
         "contracts/",
@@ -30,7 +30,7 @@ urlpatterns = [
                 "get": "list",
                 "post": "create",
             }
-        )
+        ),
     ),
     path(
         "contracts/<int:pk>/",
@@ -40,7 +40,7 @@ urlpatterns = [
                 "patch": "update",
                 "delete": "destroy",
             }
-        )
+        ),
     ),
     path(
         "events/",
@@ -49,7 +49,7 @@ urlpatterns = [
                 "get": "list",
                 "post": "create",
             }
-        )
+        ),
     ),
     path(
         "events/<int:pk>/",
@@ -59,6 +59,6 @@ urlpatterns = [
                 "patch": "update",
                 "delete": "destroy",
             }
-        )
+        ),
     ),
 ]

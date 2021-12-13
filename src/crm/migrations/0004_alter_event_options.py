@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0003_auto_20211126_1402'),
+        ("crm", "0003_auto_20211126_1402"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='event',
-            options={'verbose_name': 'Évènement', 'verbose_name_plural': 'Évènements'},
+            name="event",
+            options={"verbose_name": "Évènement", "verbose_name_plural": "Évènements"},
         ),
     ]

@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0021_alter_contract_signature_date'),
+        ("crm", "0021_alter_contract_signature_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='contract',
-            name='signature_date',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='date de signature'),
+            model_name="contract",
+            name="signature_date",
+            field=models.DateTimeField(
+                blank=True, null=True, verbose_name="date de signature"
+            ),
         ),
     ]

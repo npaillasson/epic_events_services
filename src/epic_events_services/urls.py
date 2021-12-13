@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-BASE_URL = 'EpicEvents/CRM_acces/'
+BASE_URL = "EpicEvents/CRM_acces/"
 
 urlpatterns = [
     path(BASE_URL, admin.site.urls, name="administration_interface"),

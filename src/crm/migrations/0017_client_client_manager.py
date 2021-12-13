@@ -10,14 +10,20 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('crm', '0016_alter_client_is_client'),
+        ("crm", "0016_alter_client_is_client"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='client',
-            name='client_manager',
-            field=models.ForeignKey(default=-1, on_delete=django.db.models.deletion.CASCADE, related_name='client_manager', to='accounts.user', validators=[crm.validators.is_sale_validator]),
+            model_name="client",
+            name="client_manager",
+            field=models.ForeignKey(
+                default=-1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="client_manager",
+                to="accounts.user",
+                validators=[crm.validators.is_sale_validator],
+            ),
             preserve_default=False,
         ),
     ]

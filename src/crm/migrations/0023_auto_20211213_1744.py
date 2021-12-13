@@ -8,18 +8,28 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0022_alter_contract_signature_date'),
+        ("crm", "0022_alter_contract_signature_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='contract',
-            name='client',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='client', to='crm.client', validators=[crm.validators.is_client_validator]),
+            model_name="contract",
+            name="client",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="client",
+                to="crm.client",
+                validators=[crm.validators.is_client_validator],
+            ),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='contract',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='contract', to='crm.contract', validators=[crm.validators.is_signed_validator]),
+            model_name="event",
+            name="contract",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="contract",
+                to="crm.contract",
+                validators=[crm.validators.is_signed_validator],
+            ),
         ),
     ]

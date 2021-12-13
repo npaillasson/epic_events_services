@@ -6,28 +6,37 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0006_auto_20211124_2213'),
+        ("accounts", "0006_auto_20211124_2213"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='first_name',
-            field=models.CharField(max_length=150, verbose_name='prénom'),
+            model_name="user",
+            name="first_name",
+            field=models.CharField(max_length=150, verbose_name="prénom"),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='last_name',
-            field=models.CharField(max_length=150, verbose_name='Nom de famille'),
+            model_name="user",
+            name="last_name",
+            field=models.CharField(max_length=150, verbose_name="Nom de famille"),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='team',
-            field=models.CharField(choices=[('1', 'Gestion'), ('2', 'Vente'), ('3', 'Support')], max_length=30, verbose_name='équipe'),
+            model_name="user",
+            name="team",
+            field=models.CharField(
+                choices=[("1", "Gestion"), ("2", "Vente"), ("3", "Support")],
+                max_length=30,
+                verbose_name="équipe",
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='username',
-            field=models.CharField(blank=True, max_length=150, unique=True, verbose_name="nom d'utilisateur"),
+            model_name="user",
+            name="username",
+            field=models.CharField(
+                blank=True,
+                max_length=150,
+                unique=True,
+                verbose_name="nom d'utilisateur",
+            ),
         ),
     ]

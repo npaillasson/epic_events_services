@@ -7,17 +7,21 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0007_alter_event_status'),
+        ("crm", "0007_alter_event_status"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='contract',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='contract', to='crm.contract'),
+            model_name="event",
+            name="contract",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="contract",
+                to="crm.contract",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='event',
+            name="event",
             unique_together=set(),
         ),
     ]

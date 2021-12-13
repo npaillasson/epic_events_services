@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0015_auto_20211203_1956'),
+        ("crm", "0015_auto_20211203_1956"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='client',
-            name='is_client',
-            field=models.BooleanField(default=False, verbose_name='Convertir le prospect en client'),
+            model_name="client",
+            name="is_client",
+            field=models.BooleanField(
+                default=False, verbose_name="Convertir le prospect en client"
+            ),
         ),
     ]

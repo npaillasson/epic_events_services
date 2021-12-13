@@ -18,10 +18,10 @@ def get_user(user_id):
 def partial_user_update(serializer, data, obj):
     for key in data.keys():
         if key == "password":
-            serializer.password = custom_password_validator(serializer.validated_data.get("password"))
+            serializer.password = custom_password_validator(
+                serializer.validated_data.get("password")
+            )
             obj.set_passord(serializer.password)
         else:
             obj.__dict__[key] = serializer.validated_data.get(key)
     obj.save()
-
-

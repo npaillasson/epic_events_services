@@ -7,26 +7,34 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0009_alter_contract_client'),
+        ("crm", "0009_alter_contract_client"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='contract',
-            name='client',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='client', to='crm.client'),
+            model_name="contract",
+            name="client",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="client",
+                to="crm.client",
+            ),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='contract',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='contract', to='crm.contract'),
+            model_name="event",
+            name="contract",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="contract",
+                to="crm.contract",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='contract',
-            unique_together={('id', 'client')},
+            name="contract",
+            unique_together={("id", "client")},
         ),
         migrations.AlterUniqueTogether(
-            name='event',
-            unique_together={('id', 'contract')},
+            name="event",
+            unique_together={("id", "contract")},
         ),
     ]

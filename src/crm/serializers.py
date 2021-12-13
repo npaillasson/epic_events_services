@@ -21,19 +21,20 @@ class ClientListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = [
-        "id",
-        "first_name",
-        "last_name",
-        "company",
-        "email",
-        "phone_number",
-        "additional_information",
-        "client_manager",
-        "client_manager_username",
-        "is_client",
-        "time_created",
-        "time_changed"
+            "id",
+            "first_name",
+            "last_name",
+            "company",
+            "email",
+            "phone_number",
+            "additional_information",
+            "client_manager",
+            "client_manager_username",
+            "is_client",
+            "time_created",
+            "time_changed",
         ]
+
 
 class ContractSerializer(serializers.ModelSerializer):
     client_name = serializers.SerializerMethodField()
@@ -50,7 +51,6 @@ class ContractSerializer(serializers.ModelSerializer):
         except AttributeError:
             client = Client.objects.get(id=obj.client)
             return str(client)
-
 
     def get_client_manager(self, obj):
         try:
@@ -96,6 +96,7 @@ class ContractSerializer(serializers.ModelSerializer):
             "time_created",
             "time_changed",
         ]
+
 
 class EventSerializer(serializers.ModelSerializer):
     client_id = serializers.SerializerMethodField()

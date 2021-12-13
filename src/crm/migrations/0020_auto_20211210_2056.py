@@ -6,24 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0019_alter_contract_signature_date'),
+        ("crm", "0019_alter_contract_signature_date"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Pré-contrat',
-            fields=[
-            ],
+            name="Pré-contrat",
+            fields=[],
             options={
-                'proxy': True,
-                'indexes': [],
-                'constraints': [],
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
             },
-            bases=('crm.contract',),
+            bases=("crm.contract",),
         ),
         migrations.AlterField(
-            model_name='contract',
-            name='signature_date',
-            field=models.DateTimeField(blank=True, default=None, verbose_name='date de signature'),
+            model_name="contract",
+            name="signature_date",
+            field=models.DateTimeField(
+                blank=True, default=None, verbose_name="date de signature"
+            ),
         ),
     ]

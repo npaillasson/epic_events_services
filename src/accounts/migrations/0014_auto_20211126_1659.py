@@ -7,18 +7,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0013_auto_20211126_1659'),
+        ("accounts", "0013_auto_20211126_1659"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='first_name',
-            field=models.CharField(max_length=150, validators=[accounts.validators.has_not_number], verbose_name='prénom'),
+            model_name="user",
+            name="first_name",
+            field=models.CharField(
+                max_length=150,
+                validators=[accounts.validators.has_not_number],
+                verbose_name="prénom",
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='last_name',
-            field=models.CharField(max_length=150, validators=[accounts.validators.has_not_number], verbose_name='Nom de famille'),
+            model_name="user",
+            name="last_name",
+            field=models.CharField(
+                max_length=150,
+                validators=[accounts.validators.has_not_number],
+                verbose_name="Nom de famille",
+            ),
         ),
     ]

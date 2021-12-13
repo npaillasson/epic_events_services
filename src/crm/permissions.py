@@ -4,7 +4,6 @@ from .api_utilities import get_client, get_contract, get_event
 
 
 class CanManageClient(permissions.BasePermission):
-
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
@@ -22,7 +21,6 @@ class CanManageClient(permissions.BasePermission):
 
 
 class CanManageContract(permissions.BasePermission):
-
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
@@ -35,11 +33,11 @@ class CanManageContract(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.user == obj.client.client_manager:
-                return True
+            return True
         return False
 
-class CanManageEvent(permissions.BasePermission):
 
+class CanManageEvent(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
@@ -51,6 +49,9 @@ class CanManageEvent(permissions.BasePermission):
         return False
 
     def has_object_permission(self, request, view, obj):
-        if request.user == obj.contract.client.client_manager or request.user == obj.support_manager:
+        if (
+            request.user == obj.contract.client.client_manager
+            or request.user == obj.support_manager
+        ):
             return True
         return False

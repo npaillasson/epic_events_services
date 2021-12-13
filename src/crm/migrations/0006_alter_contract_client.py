@@ -7,13 +7,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0005_alter_event_support_manager'),
+        ("crm", "0005_alter_event_support_manager"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='contract',
-            name='client',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='client', to='crm.client'),
+            model_name="contract",
+            name="client",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="client",
+                to="crm.client",
+            ),
         ),
     ]

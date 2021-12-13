@@ -25,12 +25,12 @@ class UserCreate(viewsets.ModelViewSet):
             team=serializer.validated_data["team"],
         )
 
+
 class DisplayUser(viewsets.ModelViewSet):
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated, CanChangeCollaborators]
     serializer_class = UserSerializer
-    filterset_fields = ('team', 'username', 'email', 'first_name', 'last_name')
-
+    filterset_fields = ("team", "username", "email", "first_name", "last_name")
 
     def list(self, request, *args, **kwargs):
         queryset = self.queryset
@@ -63,4 +63,3 @@ class DisplayUser(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-

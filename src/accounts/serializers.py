@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User, TEAM_CHOICES
 
+
 class ChoiceField(serializers.ChoiceField):
     def to_representation(self, obj):
         return self._choices[obj]

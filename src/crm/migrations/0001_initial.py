@@ -16,41 +16,110 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Client',
+            name="Client",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(max_length=150)),
-                ('last_name', models.CharField(max_length=150)),
-                ('company', models.CharField(blank=True, max_length=200)),
-                ('email', models.EmailField(max_length=254, unique=True)),
-                ('phone_number', models.CharField(max_length=12, unique=True)),
-                ('additional_information', models.CharField(blank=True, max_length=1000)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("first_name", models.CharField(max_length=150)),
+                ("last_name", models.CharField(max_length=150)),
+                ("company", models.CharField(blank=True, max_length=200)),
+                ("email", models.EmailField(max_length=254, unique=True)),
+                ("phone_number", models.CharField(max_length=12, unique=True)),
+                (
+                    "additional_information",
+                    models.CharField(blank=True, max_length=1000),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Contract',
+            name="Contract",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('signature_date', models.DateTimeField(auto_now_add=True)),
-                ('amount', models.IntegerField(validators=[django.core.validators.MinValueValidator(0)])),
-                ('additional_information', models.CharField(blank=True, max_length=1000)),
-                ('client', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='client', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("signature_date", models.DateTimeField(auto_now_add=True)),
+                (
+                    "amount",
+                    models.IntegerField(
+                        validators=[django.core.validators.MinValueValidator(0)]
+                    ),
+                ),
+                (
+                    "additional_information",
+                    models.CharField(blank=True, max_length=1000),
+                ),
+                (
+                    "client",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="client",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Events',
+            name="Events",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('event_name', models.CharField(max_length=100)),
-                ('start_date', models.DateTimeField()),
-                ('end_date', models.DateTimeField()),
-                ('additional_information', models.CharField(blank=True, max_length=1000)),
-                ('status', models.CharField(choices=[(0, 'Annulé'), (1, 'Programmé'), (2, 'En cours de préparation'), (3, 'Terminé')], max_length=30)),
-                ('contract', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='contract', to='crm.contract')),
-                ('support_manager', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("event_name", models.CharField(max_length=100)),
+                ("start_date", models.DateTimeField()),
+                ("end_date", models.DateTimeField()),
+                (
+                    "additional_information",
+                    models.CharField(blank=True, max_length=1000),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            (0, "Annulé"),
+                            (1, "Programmé"),
+                            (2, "En cours de préparation"),
+                            (3, "Terminé"),
+                        ],
+                        max_length=30,
+                    ),
+                ),
+                (
+                    "contract",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="contract",
+                        to="crm.contract",
+                    ),
+                ),
+                (
+                    "support_manager",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('id', 'contract')},
+                "unique_together": {("id", "contract")},
             },
         ),
     ]

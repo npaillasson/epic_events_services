@@ -10,18 +10,23 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('crm', '0014_auto_20211202_1206'),
+        ("crm", "0014_auto_20211202_1206"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='event_name',
+            model_name="event",
+            name="event_name",
             field=models.CharField(max_length=100, verbose_name="nom de l'évènement"),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='support_manager',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='support_manager', to=settings.AUTH_USER_MODEL, validators=[crm.validators.is_support_validator]),
+            model_name="event",
+            name="support_manager",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="support_manager",
+                to=settings.AUTH_USER_MODEL,
+                validators=[crm.validators.is_support_validator],
+            ),
         ),
     ]

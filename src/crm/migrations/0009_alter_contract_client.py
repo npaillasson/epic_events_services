@@ -7,13 +7,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0008_auto_20211129_2226'),
+        ("crm", "0008_auto_20211129_2226"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='contract',
-            name='client',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='client', to='crm.client'),
+            model_name="contract",
+            name="client",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="client",
+                to="crm.client",
+            ),
         ),
     ]

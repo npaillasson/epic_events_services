@@ -9,13 +9,17 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('crm', '0004_alter_event_options'),
+        ("crm", "0004_alter_event_options"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='support_manager',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='support_manager', to=settings.AUTH_USER_MODEL),
+            model_name="event",
+            name="support_manager",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="support_manager",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

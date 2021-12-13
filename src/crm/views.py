@@ -8,20 +8,21 @@ from .serializers import ClientListSerializer, ContractSerializer, EventSerializ
 from .api_utilities import partial_update, get_contract, get_event, get_client
 from .permissions import CanManageClient, CanManageContract, CanManageEvent
 
+
 class DisplayClient(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     permission_classes = [IsAuthenticated, CanManageClient]
     serializer_class = ClientListSerializer
     filterset_fields = [
-            "first_name",
-            "last_name",
-            "company",
-            "email",
-            "phone_number",
-            "additional_information",
-            "client_manager",
-            "is_client",
-            ]
+        "first_name",
+        "last_name",
+        "company",
+        "email",
+        "phone_number",
+        "additional_information",
+        "client_manager",
+        "is_client",
+    ]
 
     def perform_create(self, serializer):
 
@@ -36,8 +37,6 @@ class DisplayClient(viewsets.ModelViewSet):
             is_client=serializer.validated_data["is_client"],
         )
         return Response(serializer.data)
-
-
 
     def list(self, request, *args, **kwargs):
         queryset = self.queryset
@@ -65,17 +64,18 @@ class DisplayClient(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class DisplayContract(viewsets.ModelViewSet):
     queryset = Contract.objects.all()
     permission_classes = [IsAuthenticated, CanManageContract]
     serializer_class = ContractSerializer
     filterset_fields = [
-            "client",
-            "signature_date",
-            "amount",
-            "additional_information",
-            "is_signed",
-            ]
+        "client",
+        "signature_date",
+        "amount",
+        "additional_information",
+        "is_signed",
+    ]
 
     def perform_create(self, serializer):
 
@@ -83,10 +83,9 @@ class DisplayContract(viewsets.ModelViewSet):
             client=serializer.validated_data["client"],
             amount=serializer.validated_data["amount"],
             additional_information=serializer.validated_data["additional_information"],
-            is_signed=serializer.validated_data["is_signed"]
+            is_signed=serializer.validated_data["is_signed"],
         )
         return Response(serializer.data)
-
 
     def list(self, request, *args, **kwargs):
         queryset = self.queryset
@@ -120,16 +119,16 @@ class DisplayEvent(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, CanManageEvent]
     serializer_class = EventSerializer
     filterset_fields = [
-            "id",
-            "contract",
-            "support_manager",
-            "event_name",
-            "start_date",
-            "end_date",
-            "status",
-            "time_created",
-            "time_changed"
-            ]
+        "id",
+        "contract",
+        "support_manager",
+        "event_name",
+        "start_date",
+        "end_date",
+        "status",
+        "time_created",
+        "time_changed",
+    ]
 
     def perform_create(self, serializer):
 
@@ -169,5 +168,6 @@ class DisplayEvent(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # Create your views here.
