@@ -53,8 +53,34 @@ def api_team_validator(value, group):
 
 def api_end_date_validator(start_date, end_date):
     if start_date > end_date:
-        raise ValidationError(detail="Erreur: La date de fin de l'évènement ne peut pas être avant la date de début!")
+        raise ValidationError(detail={"date": "Erreur: La date de fin de l'évènement ne peut pas être avant la date de début!"})
 
 def end_date_validator(start_date, end_date):
     if start_date > end_date:
         raise exceptions.ValidationError("Erreur: La date de fin de l'évènement ne peut pas être avant la date de début!")
+
+def api_contract_validator(contract):
+    try:
+        is_signed_validator(contract)
+    except exceptions.ValidationError as exception_to_return:
+        exception_to_return = ", ".join(exception_to_return)
+        detail = {"contract": "{}".format(exception_to_return)}
+        raise ValidationError(detail=detail)
+
+def api_client_validator(client):
+    try:
+        is_client_validator(client)
+    except exceptions.ValidationError as exception_to_return:
+        exception_to_return = ", ".join(exception_to_return)
+        detail = {"client": "{}".format(exception_to_return)}
+        raise ValidationError(detail=detail)
+
+def is_client_validator(value):
+    if not value.is_client:
+        raise exceptions.ValidationError(
+            "Erreur: Le status de ce client est 'prospect', il ne peut donc pas encore signer de contrats")
+
+def is_signed_validator(value):
+    if not value.is_signed:
+        raise exceptions.ValidationError(
+            "Erreur: l'évènement ne peut pas être créer si le contrat n'est pas signé!")

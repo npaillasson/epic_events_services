@@ -5,8 +5,15 @@ from django.core.validators import MinValueValidator
 from rest_framework.exceptions import ValidationError
 from django.core import exceptions
 from .validators import is_support_validator, api_team_validator, end_date_validator, phone_number_validator,\
-    api_end_date_validator, is_sale_validator, api_phone_number_validator
+    api_end_date_validator, is_sale_validator, api_phone_number_validator, api_contract_validator,\
+    api_client_validator, is_client_validator, is_signed_validator
 
+STATUS_CHOICES = [
+    ("0", "Annulé"),
+    ("1", "Programmé"),
+    ("2", "En cours de préparation"),
+    ("3", "Terminé"),
+]
 
 class Client(models.Model):
     first_name = models.CharField("prénom",blank=False, max_length=150)
@@ -37,7 +44,7 @@ class Client(models.Model):
 
 
 class Contract(models.Model):
-    client = models.ForeignKey(to=Client, on_delete=models.CASCADE, related_name="client")
+    client = models.ForeignKey(to=Client, on_delete=models.CASCADE, related_name="client", validators=[is_client_validator])
     signature_date = models.DateTimeField("date de signature", blank=True, null=True)
     amount = models.IntegerField("montant du contrat (€)", blank=False, validators=[MinValueValidator(0)])
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
@@ -50,13 +57,16 @@ class Contract(models.Model):
         if self.id:
             if not Contract.objects.get(id=self.id).is_signed and self.is_signed:
                 self.signature_date = datetime.datetime.now()
+                api_client_validator(self.client)
                 return super().save()
             if Contract.objects.get(id=self.id).is_signed and not self.is_signed:
-                raise ValidationError(detail="is_signed: Erreur! Une fois signé un contrat ne peut pas être invalidé")
+                raise ValidationError(detail={"is_signed": "Erreur! Une fois signé un contrat ne peut pas être invalidé"})
         elif not self.id:
             if self.is_signed:
                 self.signature_date = datetime.datetime.now()
+                api_client_validator(self.client)
                 return super().save()
+        api_client_validator(self.client)
         return super().save()
 
     class Meta:
@@ -70,17 +80,10 @@ class Contract(models.Model):
 
 class Event(models.Model):
 
-    STATUS_CHOICES = [
-        ("0", "Annulé"),
-        ("1", "Programmé"),
-        ("2", "En cours de préparation"),
-        ("3", "Terminé"),
-    ]
-
-    contract = models.OneToOneField(blank=False, to=Contract, on_delete=models.CASCADE, related_name="contract")
+    contract = models.OneToOneField(blank=False, to=Contract, on_delete=models.CASCADE, related_name="contract", validators=[is_signed_validator])
     support_manager = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=False, related_name="support_manager",
                                         validators=[is_support_validator])
-    event_name = models.CharField("nom de l'évènement", blank=False, max_length=100)
+    event_name = models.CharField("nom de l'évènement", blank=False, max_length=100,)
     start_date = models.DateTimeField("date de début", blank=False)
     end_date = models.DateTimeField("date de fin", blank=False)
     additional_information = models.TextField("information additionnelle", blank=True, max_length=1000)
@@ -92,6 +95,7 @@ class Event(models.Model):
              update_fields=None,):
         api_team_validator(value=self.support_manager, group="3")
         api_end_date_validator(self.start_date, self.end_date)
+        api_contract_validator(self.contract)
         super().save()
 
     def clean(self):
