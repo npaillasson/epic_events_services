@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import NotFound
-from .models import Client, Contract, Event
+import crm.models as models
+#from .models import Client, Contract, Event
 
 def partial_update(serializer, data, obj):
     for key in data.keys():
@@ -9,15 +10,15 @@ def partial_update(serializer, data, obj):
 
 
 def get_client(id):
-    return get_object(id, Client)
+    return get_object(id, models.Client)
 
 
 def get_contract(id):
-    return get_object(id, Contract)
+    return get_object(id, models.Contract)
 
 
 def get_event(id):
-    return get_object(id, Event)
+    return get_object(id, models.Event)
 
 
 def get_object(id, model):

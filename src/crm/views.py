@@ -5,7 +5,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from .models import Event, Client, Contract
 from .serializers import ClientListSerializer, ContractSerializer, EventSerializer
-from .api_utilities import partial_update, get_client, get_contract, get_event
+from .api_utilities import partial_update, get_contract, get_event, get_client
 from .permissions import CanManageClient, CanManageContract, CanManageEvent
 
 class DisplayClient(viewsets.ModelViewSet):
@@ -36,6 +36,7 @@ class DisplayClient(viewsets.ModelViewSet):
             is_client=serializer.validated_data["is_client"],
         )
         return Response(serializer.data)
+
 
 
     def list(self, request, *args, **kwargs):
@@ -80,9 +81,9 @@ class DisplayContract(viewsets.ModelViewSet):
 
         Contract.objects.create(
             client=serializer.validated_data["client"],
-            amount = serializer.validated_data["amount"],
-            additional_information = serializer.validated_data["additional_information"],
-            is_signed = serializer.validated_data["is_signed"]
+            amount=serializer.validated_data["amount"],
+            additional_information=serializer.validated_data["additional_information"],
+            is_signed=serializer.validated_data["is_signed"]
         )
         return Response(serializer.data)
 
@@ -116,7 +117,7 @@ class DisplayContract(viewsets.ModelViewSet):
 
 class DisplayEvent(viewsets.ModelViewSet):
     queryset = Event.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CanManageEvent]
     serializer_class = EventSerializer
     filterset_fields = [
             "id",

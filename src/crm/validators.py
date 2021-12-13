@@ -1,9 +1,12 @@
 import re
 import time
+from django.shortcuts import get_object_or_404
 from django.core import exceptions
 from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import User
+from .api_utilities import get_contract, get_client
+
 
 FRENCH_PHONE_NUMBER_PATTERN = re.compile(r"^0[1-9]([ -.]?[0-9]{2}){4}$")
 
@@ -76,11 +79,15 @@ def api_client_validator(client):
         raise ValidationError(detail=detail)
 
 def is_client_validator(value):
+    if type(value) == int:
+        value = get_client(id=value)
     if not value.is_client:
         raise exceptions.ValidationError(
             "Erreur: Le status de ce client est 'prospect', il ne peut donc pas encore signer de contrats")
 
 def is_signed_validator(value):
+    if type(value) == int:
+        value = get_contract(id=value)
     if not value.is_signed:
         raise exceptions.ValidationError(
             "Erreur: l'évènement ne peut pas être créer si le contrat n'est pas signé!")
