@@ -1,5 +1,4 @@
 from rest_framework import permissions
-from rest_framework.exceptions import NotFound
 from rest_framework.permissions import SAFE_METHODS
 from .api_utilities import get_client, get_contract, get_event
 

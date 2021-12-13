@@ -3,7 +3,6 @@ from django.db import models
 from accounts.models import User
 from django.core.validators import MinValueValidator
 from rest_framework.exceptions import ValidationError
-from django.core import exceptions
 from .validators import is_support_validator, api_team_validator, end_date_validator, phone_number_validator,\
     api_end_date_validator, is_sale_validator, api_phone_number_validator, api_contract_validator,\
     api_client_validator, is_client_validator, is_signed_validator

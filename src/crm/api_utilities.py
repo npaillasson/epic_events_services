@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import NotFound
 import crm.models as models
-#from .models import Client, Contract, Event
+
 
 def partial_update(serializer, data, obj):
     for key in data.keys():

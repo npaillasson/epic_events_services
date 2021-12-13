@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 
 
-
 def is_in_group(user, group):
     return user.groups.filter(name=str(group)).exists()
 
