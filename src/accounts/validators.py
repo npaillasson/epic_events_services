@@ -1,9 +1,6 @@
 from django.core import exceptions
-from django.db import models
-from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.exceptions import ValidationError
-from django.contrib.auth import get_user_model
 
 
 def custom_password_validator(password):

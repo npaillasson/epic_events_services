@@ -1,15 +1,10 @@
-from django.shortcuts import render
-from django.contrib.auth.password_validation import validate_password
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .serializers import UserSerializer, AdminUserSerializer
-from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
-from django_filters.rest_framework import DjangoFilterBackend
 from .models import User
 from .permissions import CanAddCollaborators, CanChangeCollaborators
 from .api_utilities import get_user, partial_user_update
-from .validators import custom_password_validator
 
 
 class UserCreate(viewsets.ModelViewSet):

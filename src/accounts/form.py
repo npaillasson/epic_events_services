@@ -1,10 +1,6 @@
-from django import forms
-from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from .models import User, TEAM_CHOICES
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -39,7 +35,6 @@ class CustomUserChangeForm(UserChangeForm):
     """
 
     password = ReadOnlyPasswordHashField()
-    # username = forms.CharField()
 
     class Meta:
         model = get_user_model()
