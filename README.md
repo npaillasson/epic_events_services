@@ -10,25 +10,25 @@
 Ce projet est entièrement codé en [python 3.10](https://www.python.org/downloads/release/python-3100/)
 
 Il est réalisé dans le cadre d'une formation sur le site [OpenClassrooms](https://openclassrooms.com/fr/).
-Ce projet consiste en la réalisation d'un crm sécurisé utilisant django ORM. Il dispose d'une API REST créer à l'aide de REST Framework et une interface utilisateur simple réalisé avec le site d'aministration django.
+Ce projet consiste en la réalisation d'un crm sécurisé utilisant django ORM. Il dispose d'une API REST créée à l'aide de REST Framework et une interface utilisateur simple réalisée avec le site d'aministration django.
 
 ## Table des matières
-1. [Informations génerales](#informations-generales)
+1. [Informations générales](#informations-generales)
 2. [Installation/usage](#installation-usage)
 
 ***
 
 ## Informations Generales
 
-Ce projet utilise le framework de developpement web [django](https://docs.djangoproject.com/fr/4.0/) ainsi que le framework [django-rest](https://www.django-rest-framework.org/) pour la réalisation de la partie API. Ce projet utilise une base de donnée [PostgreSQL](https://www.postgresql.org/).
+Ce projet utilise le framework de developpement web [django](https://docs.djangoproject.com/fr/4.0/) ainsi que le framework [django-rest](https://www.django-rest-framework.org/) pour la réalisation de la partie API. Ce projet utilise une base de données [PostgreSQL](https://www.postgresql.org/).
 L'API du projet utilise un système d'authentification basé sur les **J**son **W**eb **T**oken ([JWT](https://jwt.io/)). La mise en oeuvre de cette authentification se fait à l'aide du package [simple-jwt](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html). Pour utiliser l'API, [une documentation](https://documenter.getpostman.com/view/17930773/UVR5spcW) dédiée est à votre disposition.
 
 
 ## Installation Usage
 
-Pour utiliser ce projet il est nécéssaire de bénéficier d'une version de python au moins égale à 3.10, car ce projet utilise le systeme de [pattern matching](https://www.python.org/dev/peps/pep-0636/) disponible à partir de python 3.10.
+Pour utiliser ce projet, il est nécéssaire de bénéficier d'une version de python au moins égale à 3.10, car ce projet utilise le système de [pattern matching](https://www.python.org/dev/peps/pep-0636/) disponible à partir de python 3.10.
 
-Il est aussi nécéssaire d'installer PostgreSQL sur votre machine et de configurer une base de donnée qui pourra être utilisée par le projet, [cliquez ici](https://www.postgresql.org/docs/) pour afficher la documentation de PostgreSQL.
+Il est aussi nécessaire d'installer PostgreSQL sur votre machine et de configurer une base de données qui pourra être utilisée par le projet, [cliquez ici](https://www.postgresql.org/docs/) pour afficher la documentation de PostgreSQL.
 
 Il est possible de cloner le projet depuis github grâce à la commande suivante :
 
@@ -36,7 +36,7 @@ Il est possible de cloner le projet depuis github grâce à la commande suivante
 $ git clone https://github.com/npaillasson/epic_events_services.git
 ```
 
-Rendez-vous ensuite à la racine du projet. Il est ensuite recommandé de créer un environement virtuel avec venv afin d'installer tous les packages et dépendances nécéssaires au fonctionnement du projet :
+Rendez-vous ensuite à la racine du projet. Il est ensuite recommandé de créer un environement virtuel avec venv afin d'installer tous les packages et dépendances nécessaires au fonctionnement du projet :
 
 ```
 $ python3 -m venv env
@@ -52,12 +52,12 @@ ou sous Windows:
 > env\Scripts\activate
 ```
 
-Vous pouvez ensuite installer les packages nécéssaire grâce à pip et au fichier requirements.txt à votre disposition à la racine du projet:
+Vous pouvez ensuite installer les packages nécessaires grâce à pip et au fichier requirements.txt à votre disposition à la racine du projet:
 ```
 $ pip install -r requirements.txt
 ```
 
-Avant de lancer le server, il est nécéssaire de renseigner votre base de donnée dans le fichier src/epic_events_services/settings.py du projet:
+Avant de lancer le serveur, il est nécessaire de renseigner votre base de données dans le fichier src/epic_events_services/settings.py du projet:
 ```
 ...
 DATABASES = {
@@ -73,7 +73,7 @@ DATABASES = {
 ...
 ```
 
-Avant la première exécution du projet il est nécéssaire d'effectuer les migrations à l'aide des commandes suivantes:
+Avant la première exécution du projet, il est nécessaire d'effectuer les migrations à l'aide des commandes suivantes:
 ```
 $ python src/manage.py makemigrations
 $ python src/manage.py migrate
@@ -86,7 +86,7 @@ $ python src/manage.py runserver
 
 Vous pouvez ensuite aller sur le [site](http://127.0.0.1:8000/EpicEvents/CRM_acces/login/) (http://127.0.0.1:8000/EpicEvents/CRM_acces/login/)
 
-Avant votre première connexion il est nécéssaire de créer un super-utilisateur à l'aide de la commande django:
+Avant votre première connexion il est nécessaire de créer un super-utilisateur à l'aide de la commande django:
 
 ```
 $ python src/manage.py createsuperuser
@@ -122,7 +122,7 @@ This project consists in the realization of a secured crm using django ORM. It h
 ## General Information
 
 This project uses the web development framework [django](https://docs.djangoproject.com/en/4.0/) as well as the framework [django-rest](https://www.django-rest-framework.org/) for the realization of the API part. This project uses a [PostgreSQL](https://www.postgresql.org/) database.
-The API of the project uses an authentication system based on **J**son **W**eb **T**oken ([JWT](https://jwt.io/)). The implementation of this authentication is done using the [simple-jwt](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html) package. To use the API, [documentation](https://documenter.getpostman.com/view/17930773/UVR5spcW) is available.
+The API of the project uses an authentication system based on **J**son **W**eb **T**oken ([JWT](https://jwt.io/)). The implementation of this authentication is done using the [simple-jwt](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html) package. To use the API, the [documentation](https://documenter.getpostman.com/view/17930773/UVR5spcW) is available.
 
 
 ## Installation
@@ -185,7 +185,7 @@ To start the server run the following command:
 $ python src/manage.py runserver
 ```
 
-You can then go to the [site](http://127.0.0.1:8000/EpicEvents/CRM_acces/login/)(http://127.0.0.1:8000/EpicEvents/CRM_acces/login/)
+You can then go to the [site](http://127.0.0.1:8000/EpicEvents/CRM_acces/login/) (http://127.0.0.1:8000/EpicEvents/CRM_acces/login/)
 
 Before your first connection it is necessary to create a super-user with the django command:
 ```
