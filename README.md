@@ -1,6 +1,6 @@
 
 ***
-[Watch below for the English version](#epic_events-en) 
+[Watch below for the English version](#epic-events-en) 
 ***
 
 # Projet Epic Events services (fr)
