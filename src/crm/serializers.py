@@ -54,7 +54,7 @@ class ContractSerializer(serializers.ModelSerializer):
 
     def get_client_manager(self, obj):
         try:
-            return str(obj.client.client_manager.id)
+            return obj.client.client_manager.id
         except AttributeError:
             client = Client.objects.get(id=self.initial_data["client"])
             user = User.objects.get(id=client.client_manager.id)
