@@ -40,7 +40,7 @@ class CustomUserManager(BaseUserManager):
             email=email,
             last_name=last_name,
             username=username,
-            team="Admin",
+            team="1",
             is_staff=True,
             is_superuser=True,
         )
