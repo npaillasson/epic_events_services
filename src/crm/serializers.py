@@ -49,21 +49,23 @@ class ContractSerializer(serializers.ModelSerializer):
         try:
             return str(obj.client)
         except AttributeError:
-            client = Client.objects.get(id=obj.client)
+            client = Client.objects.get(id=self.initial_data["client"])
             return str(client)
 
     def get_client_manager(self, obj):
         try:
             return str(obj.client.client_manager.id)
         except AttributeError:
-            user = User.objects.get(id=obj.client.client_manager.id)
+            client = Client.objects.get(id=self.initial_data["client"])
+            user = User.objects.get(id=client.client_manager.id)
             return user.id
 
     def get_client_manager_username(self, obj):
         try:
             return str(obj.client.client_manager)
         except AttributeError:
-            user = User.objects.get(id=obj.client.client_manager.id)
+            client = Client.objects.get(id=self.initial_data["client"])
+            user = User.objects.get(id=client.client_manager.id)
             return user.username
 
     def get_event_name(self, obj):
