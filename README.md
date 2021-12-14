@@ -103,7 +103,7 @@ Ou sous Windows:
 ```
 
 ***
-# epic-events (en)
+# Epic-events (en)
 ***
 
 
