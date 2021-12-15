@@ -30,7 +30,6 @@ class UserAdmin(BaseUserAdmin):
                     "last_name",
                     "email",
                     "team",
-                    "groups",
                 )
             },
         ),
@@ -46,7 +45,6 @@ class UserAdmin(BaseUserAdmin):
                     "team",
                     "password1",
                     "password2",
-                    "groups",
                 )
             },
         ),

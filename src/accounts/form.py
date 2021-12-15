@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from .custom_functions import assignment_of_groups, assignement_is_superuser
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -40,3 +41,16 @@ class CustomUserChangeForm(UserChangeForm):
         model = get_user_model()
 
         fields = ("username",)
+
+
+    def save(self, commit=True):
+        user = super(CustomUserChangeForm, self).save(commit=False)
+        data = self.cleaned_data
+        user.is_superuser = assignement_is_superuser(data["team"])
+        print(data["team"])
+        assignment_of_groups(data["team"], user)
+        print(user.groups.all())
+        user.save()
+        if commit:
+            user.save()
+        return user
