@@ -92,9 +92,14 @@ class EventAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         elif obj:
-            if request.user == obj.support_manager:
+            if request.user == obj.support_manager and request.user.team == "2":
                 return True
-            elif request.user == obj.contract.client.client_manager:
+            elif request.user == obj.contract.client.client_manager and request.user.team == "3":
+                return True
+        else:
+            if request.user.team == "2":
+                return True
+            elif request.user.team == "3":
                 return True
         return False
 
@@ -107,12 +112,15 @@ class ContractAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         elif obj:
-            if request.user == obj.client.client_manager:
+            if request.user == obj.client.client_manager and request.user.team == "2":
+                return True
+        else:
+            if request.user.team == "2":
                 return True
         return False
 
     def render_change_form(
-        self, request, context, add=False, change=False, form_url="", obj=None
+        self, request, context, add=True, change=True, form_url="", obj=None
     ):
         if request.user.team == "1":
             context["adminform"].form.fields["client"].queryset = Client.objects.filter(
@@ -122,7 +130,7 @@ class ContractAdmin(admin.ModelAdmin):
             request, context, add=True, change=True
         )
 
-    def save_model(self, request, obj, form, change):
+    def save_model(self, request, obj, form, change=True):
         obj.is_signed = True
         super(ContractAdmin, self).save_model(request, obj, form, change)
 
@@ -204,7 +212,10 @@ class ClientAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         elif obj:
-            if request.user == obj.client_manager:
+            if request.user == obj.client_manager and request.user.team == "2":
+                return True
+        else:
+            if request.user.team == "2":
                 return True
         return False
 
@@ -224,7 +235,7 @@ class ClientAdmin(admin.ModelAdmin):
         form = super(ClientAdmin, self).get_form(request, obj, **kwargs)
         return form
 
-    def save_model(self, request, obj, form, change):
+    def save_model(self, request, obj, form, change=True):
         obj.is_client = True
         super(ClientAdmin, self).save_model(request, obj, form, change)
 
