@@ -28,21 +28,16 @@ def assignement_is_superuser(team):
 
 def assignment_of_groups(team, user):
     user.groups.clear()
-    print(user.groups.all())
     match team:
         case "1":
             return None
         case "2":
-            print(user)
             group = Group.objects.get(name="vente")
-            print(group)
             group.user_set.add(user)
             group.save()
 
         case "3":
-            print(user)
             group = Group.objects.get(name="support")
-            print('hehehe',group)
             group.user_set.add(user)
             group.save()
 

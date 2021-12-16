@@ -92,9 +92,9 @@ class EventAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         elif obj:
-            if request.user == obj.support_manager and request.user.team == "2":
+            if request.user == obj.support_manager and request.user.team == "3":
                 return True
-            elif request.user == obj.contract.client.client_manager and request.user.team == "3":
+            elif request.user == obj.contract.client.client_manager and request.user.team == "2":
                 return True
         else:
             if request.user.team == "2":
